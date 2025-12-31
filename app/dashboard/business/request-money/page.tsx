@@ -10,6 +10,7 @@ export default function RequestMoneyPage() {
     const [payer, setPayer] = useState('');
     const [note, setNote] = useState('');
     const [showContacts, setShowContacts] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const quickContacts = [
         { name: 'Supplier A', number: '01700000001' },
@@ -22,8 +23,11 @@ export default function RequestMoneyPage() {
             alert('Please fill in Number and Amount');
             return;
         }
-        alert(`Request sent to ${payer} for ৳${amount}`);
-        // "Reload" / Reset form
+
+        // Show success modal
+        setShowSuccess(true);
+
+        // Reset form
         setAmount('');
         setPayer('');
         setNote('');
@@ -131,6 +135,43 @@ export default function RequestMoneyPage() {
                                         </button>
                                     ))}
                                 </div>
+                            </motion.div>
+                        </>
+                    )}
+                </AnimatePresence>
+
+                {/* Success Modal */}
+                <AnimatePresence>
+                    {showSuccess && (
+                        <>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setShowSuccess(false)}
+                                className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm flex items-center justify-center p-4"
+                            >
+                                <motion.div
+                                    initial={{ scale: 0.9, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0.9, opacity: 0 }}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="bg-white dark:bg-[#1e293b] w-full max-w-sm rounded-[2.5rem] p-8 relative text-center"
+                                >
+                                    <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600 dark:text-blue-400">
+                                        <Send className="w-10 h-10" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Request Sent!</h3>
+                                    <p className="text-gray-500 dark:text-slate-400 mb-8">
+                                        Your money request has been successfully sent to the payer.
+                                    </p>
+                                    <button
+                                        onClick={() => setShowSuccess(false)}
+                                        className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-4 rounded-2xl hover:scale-[1.02] transition-transform"
+                                    >
+                                        Done
+                                    </button>
+                                </motion.div>
                             </motion.div>
                         </>
                     )}
