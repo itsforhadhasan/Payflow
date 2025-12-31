@@ -10,6 +10,7 @@ export default function WithdrawPage() {
     const [agentNumber, setAgentNumber] = useState('');
     const [note, setNote] = useState('');
     const [showContacts, setShowContacts] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     // Mock agents
     const quickAgents = [
@@ -20,11 +21,17 @@ export default function WithdrawPage() {
 
     const handleSubmit = () => {
         if (!amount || !agentNumber) {
+            // Using a simple shake animation or error state would be better, but sticking to alert for validation for now, 
+            // or better, just don't proceed.
+            // Let's rely on required attribute or better, just show alert for error, but Success Modal for success.
             alert('Please fill in Agent Number and Amount');
             return;
         }
-        alert(`Withdrawal request sent to ${agentNumber} for ৳${amount}`);
-        // "Reload" / Reset form
+
+        // Show success modal
+        setShowSuccess(true);
+
+        // Reset form in background
         setAmount('');
         setAgentNumber('');
         setNote('');
@@ -132,6 +139,43 @@ export default function WithdrawPage() {
                                         </button>
                                     ))}
                                 </div>
+                            </motion.div>
+                        </>
+                    )}
+                </AnimatePresence>
+
+                {/* Success Modal */}
+                <AnimatePresence>
+                    {showSuccess && (
+                        <>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setShowSuccess(false)}
+                                className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm flex items-center justify-center p-4"
+                            >
+                                <motion.div
+                                    initial={{ scale: 0.9, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0.9, opacity: 0 }}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="bg-white dark:bg-[#1e293b] w-full max-w-sm rounded-[2.5rem] p-8 relative text-center"
+                                >
+                                    <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600 dark:text-green-400">
+                                        <Banknote className="w-10 h-10" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Withdrawal Initiated!</h3>
+                                    <p className="text-gray-500 dark:text-slate-400 mb-8">
+                                        Your request has been sent to the agent. Please wait for confirmation.
+                                    </p>
+                                    <button
+                                        onClick={() => setShowSuccess(false)}
+                                        className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-4 rounded-2xl hover:scale-[1.02] transition-transform"
+                                    >
+                                        Done
+                                    </button>
+                                </motion.div>
                             </motion.div>
                         </>
                     )}
