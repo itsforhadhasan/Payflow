@@ -33,6 +33,7 @@ export default function AgentDashboard() {
             items: [
                 { name: 'Settings', icon: Settings, href: '/dashboard/agent/settings' },
                 { name: 'Support', icon: Mail, href: '/dashboard/agent/support' },
+                { name: 'Switch to Personal', icon: Users, href: '/dashboard/personal', color: 'text-pink-600 bg-pink-50 dark:bg-pink-900/10' },
                 { name: 'Log Out', icon: LogOut, href: '/auth/login', color: 'text-red-500 bg-red-50 dark:bg-red-900/10' },
             ]
         }
@@ -105,6 +106,15 @@ export default function AgentDashboard() {
 
                             {/* Desktop Notification & Menu */}
                             <div className="hidden md:flex items-center gap-4 relative z-[60]">
+                                {/* Mode Switch */}
+                                <Link 
+                                    href="/dashboard/personal"
+                                    className="px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 transition-all text-white text-sm font-bold flex items-center gap-2"
+                                >
+                                    <span>Switch to Personal</span>
+                                    <ChevronRight className="w-4 h-4" />
+                                </Link>
+
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();

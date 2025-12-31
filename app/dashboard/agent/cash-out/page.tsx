@@ -1,29 +1,78 @@
 'use client';
 
 import { SubPageHeader } from '@/components/sub-page-header';
-import { Wallet, User, Phone } from 'lucide-react';
+import { Wallet, User, Phone, CheckCircle, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
 export default function CashOutPage() {
     const [phone, setPhone] = useState('');
     const [amount, setAmount] = useState('');
     const [note, setNote] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 3000);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
         if (!phone || !amount) {
-            alert('Please fill in all required fields');
+            showToast('Please fill in all required fields', 'error');
             return;
         }
-        alert(`Cash Out request processed: ৳${amount} to ${phone}`);
-        setPhone('');
-        setAmount('');
-        setNote('');
+
+        if (parseFloat(amount) <= 0) {
+            showToast('Amount must be greater than 0', 'error');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Here you would typically send data to your backend
+            console.log({
+                type: 'cash-out',
+                phone,
+                amount,
+                note,
+                timestamp: new Date().toISOString()
+            });
+
+            showToast(`Cash Out request processed: ৳${amount} to ${phone}`, 'success');
+            setPhone('');
+            setAmount('');
+            setNote('');
+        } catch (error) {
+            showToast('Failed to process cash out request', 'error');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
         <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#0f172a] pb-24">
             <SubPageHeader title="Cash Out" backLink="/dashboard/agent" className="bg-emerald-600" />
+
+            {/* Toast Notification */}
+            {toast && (
+                <div className={`fixed top-24 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-3 px-6 py-4 rounded-xl shadow-lg z-50 animate-in fade-in slide-in-from-top-4 ${
+                    toast.type === 'success' 
+                        ? 'bg-orange-600 text-white' 
+                        : 'bg-red-600 text-white'
+                }`}>
+                    {toast.type === 'success' ? (
+                        <CheckCircle className="w-5 h-5" />
+                    ) : (
+                        <AlertCircle className="w-5 h-5" />
+                    )}
+                    <span className="font-medium">{toast.message}</span>
+                </div>
+            )}
 
             <div className="max-w-md mx-auto px-4">
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -48,7 +97,7 @@ export default function CashOutPage() {
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
                                         placeholder="01712 345 678"
-                                        className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-white"
+                                        className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                                         required
                                     />
                                 </div>
@@ -61,9 +110,10 @@ export default function CashOutPage() {
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
                                     placeholder="0.00"
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-white"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                                     required
                                     min="1"
+                                    step="0.01"
                                 />
                             </div>
 
@@ -74,7 +124,7 @@ export default function CashOutPage() {
                                     onChange={(e) => setNote(e.target.value)}
                                     placeholder="Add a note..."
                                     rows={3}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-white resize-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
                                 />
                             </div>
                         </div>
@@ -82,9 +132,10 @@ export default function CashOutPage() {
 
                     <button
                         type="submit"
-                        className="w-full py-4 bg-orange-600 text-white rounded-xl font-bold hover:bg-orange-700 transition-colors active:scale-95"
+                        disabled={isLoading}
+                        className="w-full py-4 bg-orange-600 text-white rounded-xl font-bold hover:bg-orange-700 transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Process Cash Out
+                        {isLoading ? 'Processing...' : 'Process Cash Out'}
                     </button>
                 </form>
             </div>
