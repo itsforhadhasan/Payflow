@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
     Send, Smartphone, Download, ShoppingBag,
     CreditCard, Lightbulb,
@@ -15,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { SpendingPieChart } from '@/components/spending-pie-chart';
 
 export default function PersonalDashboard() {
+    const router = useRouter();
     const [showBalance, setShowBalance] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
@@ -52,7 +54,7 @@ export default function PersonalDashboard() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#0f172a] transition-colors duration-300 pb-28 md:pb-12 overflow-x-hidden">
+        <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#0f172a] transition-colors duration-300 pb-32 md:pb-16 overflow-x-hidden">
 
             {/* Desktop Wrapper */}
             <div className="max-w-5xl mx-auto md:pt-8 px-0 md:px-4">
@@ -257,7 +259,13 @@ export default function PersonalDashboard() {
                             <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2">Offers for You</h3>
 
                             {/* Foodpanda */}
-                            <div className="bg-pink-50 dark:bg-pink-900/10 p-5 rounded-[2rem] border border-pink-100 dark:border-pink-900/20 relative overflow-hidden group cursor-pointer hover:shadow-lg hover:shadow-pink-500/10 transition-all">
+                            <button
+                                onClick={() => {
+                                    // Navigate to payment page or show offer details
+                                    router.push('/dashboard/personal/payment');
+                                }}
+                                className="w-full bg-pink-50 dark:bg-pink-900/10 p-5 rounded-[2rem] border border-pink-100 dark:border-pink-900/20 relative overflow-hidden group cursor-pointer hover:shadow-lg hover:shadow-pink-500/10 transition-all active:scale-[0.98]"
+                            >
                                 <div className="absolute right-0 top-0 w-24 h-24 bg-pink-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
                                 <div className="relative z-10 flex items-center justify-between">
                                     <div>
@@ -269,10 +277,16 @@ export default function PersonalDashboard() {
                                         <ShoppingBag className="w-6 h-6" />
                                     </div>
                                 </div>
-                            </div>
+                            </button>
 
                             {/* Daraz */}
-                            <div className="bg-orange-50 dark:bg-orange-900/10 p-5 rounded-[2rem] border border-orange-100 dark:border-orange-900/20 relative overflow-hidden group cursor-pointer hover:shadow-lg hover:shadow-orange-500/10 transition-all">
+                            <button
+                                onClick={() => {
+                                    // Navigate to payment page or show offer details
+                                    router.push('/dashboard/personal/payment');
+                                }}
+                                className="w-full bg-orange-50 dark:bg-orange-900/10 p-5 rounded-[2rem] border border-orange-100 dark:border-orange-900/20 relative overflow-hidden group cursor-pointer hover:shadow-lg hover:shadow-orange-500/10 transition-all active:scale-[0.98]"
+                            >
                                 <div className="absolute right-0 top-0 w-24 h-24 bg-orange-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
                                 <div className="relative z-10 flex items-center justify-between">
                                     <div>
@@ -284,7 +298,7 @@ export default function PersonalDashboard() {
                                         <ShoppingBag className="w-6 h-6" />
                                     </div>
                                 </div>
-                            </div>
+                            </button>
                         </div>
 
                         {/* Donations */}
@@ -292,7 +306,7 @@ export default function PersonalDashboard() {
                             <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-6">Donations</h3>
                             <div className="space-y-4">
                                 {/* Bidyanondo */}
-                                <div className="flex items-center gap-4 p-3 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-2xl transition-colors cursor-pointer group">
+                                <div className="flex items-center gap-4 p-3 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-2xl transition-colors group">
                                     <div className="w-12 h-12 rounded-2xl bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <Heart className="w-6 h-6 fill-current" />
                                     </div>
@@ -300,11 +314,19 @@ export default function PersonalDashboard() {
                                         <h4 className="font-bold text-gray-800 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">Bidyanondo</h4>
                                         <p className="text-xs text-gray-500 dark:text-slate-400">1 Taka Meal</p>
                                     </div>
-                                    <button className="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 transition-colors">Donate</button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            router.push('/dashboard/personal/send');
+                                        }}
+                                        className="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 active:scale-95 transition-all"
+                                    >
+                                        Donate
+                                    </button>
                                 </div>
 
                                 {/* JAAGO */}
-                                <div className="flex items-center gap-4 p-3 hover:bg-yellow-50 dark:hover:bg-yellow-900/10 rounded-2xl transition-colors cursor-pointer group">
+                                <div className="flex items-center gap-4 p-3 hover:bg-yellow-50 dark:hover:bg-yellow-900/10 rounded-2xl transition-colors group">
                                     <div className="w-12 h-12 rounded-2xl bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <BookOpen className="w-6 h-6" />
                                     </div>
@@ -312,11 +334,19 @@ export default function PersonalDashboard() {
                                         <h4 className="font-bold text-gray-800 dark:text-white group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">JAAGO Foundation</h4>
                                         <p className="text-xs text-gray-500 dark:text-slate-400">Sponsor a Child</p>
                                     </div>
-                                    <button className="px-4 py-2 rounded-xl bg-yellow-600 text-white text-xs font-bold hover:bg-yellow-700 transition-colors">Donate</button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            router.push('/dashboard/personal/send');
+                                        }}
+                                        className="px-4 py-2 rounded-xl bg-yellow-600 text-white text-xs font-bold hover:bg-yellow-700 active:scale-95 transition-all"
+                                    >
+                                        Donate
+                                    </button>
                                 </div>
 
                                 {/* Red Crescent */}
-                                <div className="flex items-center gap-4 p-3 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-2xl transition-colors cursor-pointer group">
+                                <div className="flex items-center gap-4 p-3 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-2xl transition-colors group">
                                     <div className="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <LifeBuoy className="w-6 h-6" />
                                     </div>
@@ -324,7 +354,15 @@ export default function PersonalDashboard() {
                                         <h4 className="font-bold text-gray-800 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white transition-colors">Red Crescent</h4>
                                         <p className="text-xs text-gray-500 dark:text-slate-400">Emergency Fund</p>
                                     </div>
-                                    <button className="px-4 py-2 rounded-xl bg-gray-800 dark:bg-slate-700 text-white text-xs font-bold hover:bg-black dark:hover:bg-slate-600 transition-colors">Donate</button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            router.push('/dashboard/personal/send');
+                                        }}
+                                        className="px-4 py-2 rounded-xl bg-gray-800 dark:bg-slate-700 text-white text-xs font-bold hover:bg-black dark:hover:bg-slate-600 active:scale-95 transition-all"
+                                    >
+                                        Donate
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -333,11 +371,15 @@ export default function PersonalDashboard() {
                         <div className="bg-white dark:bg-[#1e293b] rounded-[2rem] p-6 md:p-8 shadow-sm dark:shadow-none h-fit border border-gray-100 dark:border-slate-800">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-lg font-bold text-gray-800 dark:text-white">Transactions</h3>
-                                <Link href="#" className="text-xs font-bold text-[#E2136E] hover:underline">View All</Link>
+                                <Link href="/dashboard/personal/statements" className="text-xs font-bold text-[#E2136E] hover:underline">View All</Link>
                             </div>
                             <div className="space-y-6">
                                 {MOCK_TRANSACTIONS.slice(0, 4).map((tx, i) => (
-                                    <div key={i} className="flex items-center gap-4 group cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/50 p-2 -mx-2 rounded-xl transition-colors">
+                                    <button
+                                        key={i}
+                                        onClick={() => router.push('/dashboard/personal/statements')}
+                                        className="w-full flex items-center gap-4 group cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/50 p-2 -mx-2 rounded-xl transition-colors active:scale-[0.98]"
+                                    >
                                         <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-colors shadow-sm",
                                             tx.type === 'CASH_OUT' ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400' :
                                                 tx.type === 'ADD_MONEY' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400' :
@@ -346,7 +388,7 @@ export default function PersonalDashboard() {
                                             {tx.type === 'CASH_OUT' ? <Download className="w-5 h-5 stroke-[2.5]" /> :
                                                 tx.type === 'ADD_MONEY' ? <ArrowDownLeft className="w-5 h-5 stroke-[2.5]" /> : <Send className="w-5 h-5 stroke-[2.5]" />}
                                         </div>
-                                        <div className="flex-1 min-w-0">
+                                        <div className="flex-1 min-w-0 text-left">
                                             <p className="font-bold text-gray-800 dark:text-slate-200 group-hover:text-[#E2136E] dark:group-hover:text-[#E2136E] transition-colors truncate">{tx.description || 'Transfer'}</p>
                                             <p className="text-xs text-gray-500 dark:text-slate-500 font-medium mt-0.5">{new Date(tx.date).toLocaleDateString()}</p>
                                         </div>
@@ -355,7 +397,7 @@ export default function PersonalDashboard() {
                                                 {tx.type === 'ADD_MONEY' ? '+' : '-'}৳ {tx.amount}
                                             </p>
                                         </div>
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         </div>
@@ -447,15 +489,21 @@ export default function PersonalDashboard() {
                     </Link>
 
                     {/* Inbox */}
-                    <Link href="#" className="flex flex-col items-center gap-1 text-gray-400 dark:text-slate-500 hover:text-[#E2136E] transition-colors w-16">
+                    <Link href="/dashboard/personal/support" className="flex flex-col items-center gap-1 text-gray-400 dark:text-slate-500 hover:text-[#E2136E] transition-colors w-16">
                         <Mail className="w-6 h-6 stroke-[2.5]" />
                         <span className="text-[10px] font-medium">Inbox</span>
                     </Link>
 
                     {/* Scan QR (Center Prominent) */}
-                    <button className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
+                    <button 
+                        onClick={() => {
+                            // Show QR scanner or navigate to QR page
+                            alert('QR Scanner feature coming soon!');
+                        }}
+                        className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+                    >
                         <div className="w-16 h-16 rounded-full bg-white dark:bg-[#1e293b] p-1.5 shadow-[0_-5px_10px_rgba(0,0,0,0.05)] dark:shadow-none ring-4 ring-[#f8f9fa] dark:ring-[#0f172a]">
-                            <div className="w-full h-full rounded-full bg-[#E2136E] flex items-center justify-center text-white shadow-lg hover:scale-105 transition-transform">
+                            <div className="w-full h-full rounded-full bg-[#E2136E] flex items-center justify-center text-white shadow-lg hover:scale-105 active:scale-95 transition-transform">
                                 <QrCode className="w-7 h-7" />
                             </div>
                         </div>
@@ -466,7 +514,7 @@ export default function PersonalDashboard() {
                     <div className="w-12"></div>
 
                     {/* People */}
-                    <Link href="#" className="flex flex-col items-center gap-1 text-gray-400 dark:text-slate-500 hover:text-[#E2136E] transition-colors w-16">
+                    <Link href="/dashboard/personal/send" className="flex flex-col items-center gap-1 text-gray-400 dark:text-slate-500 hover:text-[#E2136E] transition-colors w-16">
                         <Users className="w-6 h-6 stroke-[2.5]" />
                         <span className="text-[10px] font-medium">People</span>
                     </Link>

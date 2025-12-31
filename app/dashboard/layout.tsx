@@ -17,7 +17,7 @@ export default function DashboardLayout({
     else if (pathname.includes('/agent')) role = 'agent';
     else if (pathname.includes('/admin')) role = 'admin';
     const isPersonal = role === 'personal';
-    const hideGlobalNav = role === 'personal' || role === 'business';
+    const hideGlobalNav = role === 'personal' || role === 'business' || role === 'agent';
 
     return (
         <div className="min-h-screen bg-background flex">
