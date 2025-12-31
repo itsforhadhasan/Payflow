@@ -3,14 +3,14 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 const data = [
-    { time: '9 AM', requests: 12, amount: 15000 },
-    { time: '10 AM', requests: 18, amount: 22000 },
-    { time: '11 AM', requests: 25, amount: 31000 },
-    { time: '12 PM', requests: 22, amount: 28000 },
-    { time: '1 PM', requests: 15, amount: 19000 },
-    { time: '2 PM', requests: 20, amount: 25000 },
-    { time: '3 PM', requests: 28, amount: 35000 },
-    { time: '4 PM', requests: 24, amount: 30000 },
+    { time: '9 AM', requests: 12, amount: 15000, color: '#10b981' }, // Emerald
+    { time: '10 AM', requests: 18, amount: 22000, color: '#3b82f6' }, // Blue
+    { time: '11 AM', requests: 25, amount: 31000, color: '#8b5cf6' }, // Purple
+    { time: '12 PM', requests: 22, amount: 28000, color: '#ec4899' }, // Pink
+    { time: '1 PM', requests: 15, amount: 19000, color: '#f97316' }, // Orange
+    { time: '2 PM', requests: 20, amount: 25000, color: '#eab308' }, // Yellow
+    { time: '3 PM', requests: 28, amount: 35000, color: '#06b6d4' }, // Cyan
+    { time: '4 PM', requests: 24, amount: 30000, color: '#14b8a6' }, // Teal
 ];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -66,8 +66,7 @@ export function CashOutRequestsChart() {
                         {data.map((entry, index) => (
                             <Cell
                                 key={`cell-${index}`}
-                                fill="#10b981"
-                                className="dark:fill-emerald-500"
+                                fill={entry.color}
                             />
                         ))}
                     </Bar>

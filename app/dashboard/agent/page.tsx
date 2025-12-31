@@ -13,10 +13,10 @@ export default function AgentDashboard() {
     const [showNotifications, setShowNotifications] = useState(false);
 
     const quickActions = [
-        { name: 'Cash In', icon: ArrowRightLeft, href: '#', color: 'bg-emerald-600' },
-        { name: 'Cash Out', icon: Wallet, href: '#', color: 'bg-orange-600' },
-        { name: 'B2B Transfer', icon: Users, href: '#', color: 'bg-blue-600' },
-        { name: 'History', icon: History, href: '#', color: 'bg-purple-600' },
+        { name: 'Cash In', icon: ArrowRightLeft, href: '/dashboard/agent/cash-in', color: 'bg-emerald-600' },
+        { name: 'Cash Out', icon: Wallet, href: '/dashboard/agent/cash-out', color: 'bg-orange-600' },
+        { name: 'B2B Transfer', icon: Users, href: '/dashboard/agent/b2b-transfer', color: 'bg-blue-600' },
+        { name: 'History', icon: History, href: '/dashboard/agent/history', color: 'bg-purple-600' },
     ];
 
     const allMenuSections = [
@@ -24,15 +24,15 @@ export default function AgentDashboard() {
             title: "My Account",
             items: [
                 { name: 'Home', icon: Home, href: '/dashboard/agent' },
-                { name: 'History', icon: History, href: '#' },
-                { name: 'Reports', icon: FileText, href: '#' },
+                { name: 'History', icon: History, href: '/dashboard/agent/history' },
+                { name: 'Reports', icon: FileText, href: '/dashboard/agent/reports' },
             ]
         },
         {
             title: "Settings & Support",
             items: [
-                { name: 'Settings', icon: Settings, href: '#' },
-                { name: 'Support', icon: Mail, href: '#' },
+                { name: 'Settings', icon: Settings, href: '/dashboard/agent/settings' },
+                { name: 'Support', icon: Mail, href: '/dashboard/agent/support' },
                 { name: 'Log Out', icon: LogOut, href: '/auth/login', color: 'text-red-500 bg-red-50 dark:bg-red-900/10' },
             ]
         }
@@ -209,20 +209,16 @@ export default function AgentDashboard() {
                             </h3>
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-8 gap-x-2 md:gap-x-6">
                                 {quickActions.map((item, i) => (
-                                    <button 
-                                        key={i} 
-                                        onClick={() => {
-                                            if (item.href && item.href !== '#') {
-                                                window.location.href = item.href;
-                                            }
-                                        }}
+                                    <Link
+                                        key={i}
+                                        href={item.href}
                                         className="flex flex-col items-center gap-3 group active:scale-95 transition-transform"
                                     >
                                         <div className={cn("w-14 h-14 md:w-16 md:h-16 rounded-[1.2rem] flex items-center justify-center text-white shadow-lg shadow-gray-200/50 dark:shadow-none transform group-hover:scale-105 transition-all duration-300", item.color)}>
                                             <item.icon className="w-6 h-6 md:w-7 md:h-7 stroke-[2.5]" />
                                         </div>
                                         <span className="text-[10px] md:text-xs font-bold text-gray-600 dark:text-slate-400 group-hover:text-emerald-600 transition-colors text-center leading-tight truncate w-full px-1">{item.name}</span>
-                                    </button>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
@@ -248,14 +244,12 @@ export default function AgentDashboard() {
                             <QrCode className="w-12 h-12 mx-auto mb-4 opacity-90" />
                             <h3 className="text-lg font-bold mb-1">My QR Code</h3>
                             <p className="text-emerald-100 text-xs mb-4">Show this to customers for quick payments</p>
-                            <button 
-                                onClick={() => {
-                                    alert('QR Code viewer coming soon!');
-                                }}
-                                className="bg-white text-emerald-700 px-6 py-2 rounded-full text-sm font-bold hover:bg-emerald-50 active:scale-95 transition-all"
+                            <Link 
+                                href="/dashboard/agent/qr-code"
+                                className="bg-white text-emerald-700 px-6 py-2 rounded-full text-sm font-bold hover:bg-emerald-50 active:scale-95 transition-all inline-block"
                             >
                                 View QR
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -346,16 +340,14 @@ export default function AgentDashboard() {
                     </Link>
 
                     {/* Requests */}
-                    <Link href="#" className="flex flex-col items-center gap-1 text-gray-400 dark:text-slate-500 hover:text-emerald-600 transition-colors w-16">
+                    <Link href="/dashboard/agent/requests" className="flex flex-col items-center gap-1 text-gray-400 dark:text-slate-500 hover:text-emerald-600 transition-colors w-16">
                         <Users className="w-6 h-6 stroke-[2.5]" />
                         <span className="text-[10px] font-medium">Requests</span>
                     </Link>
 
                     {/* QR Code (Center Prominent) */}
-                    <button 
-                        onClick={() => {
-                            alert('QR Code feature coming soon!');
-                        }}
+                    <Link 
+                        href="/dashboard/agent/qr-code"
                         className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
                     >
                         <div className="w-16 h-16 rounded-full bg-white dark:bg-[#1e293b] p-1.5 shadow-[0_-5px_10px_rgba(0,0,0,0.05)] dark:shadow-none ring-4 ring-[#f8f9fa] dark:ring-[#0f172a]">
@@ -364,13 +356,13 @@ export default function AgentDashboard() {
                             </div>
                         </div>
                         <span className="text-[10px] font-bold text-emerald-600 mt-1">My QR</span>
-                    </button>
+                    </Link>
 
                     {/* Spacer for Center Button */}
                     <div className="w-12"></div>
 
                     {/* History */}
-                    <Link href="#" className="flex flex-col items-center gap-1 text-gray-400 dark:text-slate-500 hover:text-emerald-600 transition-colors w-16">
+                    <Link href="/dashboard/agent/history" className="flex flex-col items-center gap-1 text-gray-400 dark:text-slate-500 hover:text-emerald-600 transition-colors w-16">
                         <History className="w-6 h-6 stroke-[2.5]" />
                         <span className="text-[10px] font-medium">History</span>
                     </Link>
