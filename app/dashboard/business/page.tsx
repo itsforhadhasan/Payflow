@@ -155,9 +155,9 @@ export default function BusinessDashboard() {
                                 </div>
                             </div>
 
-                            <button className="w-full mt-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition-colors">
+                            <Link href="/dashboard/business/withdraw" className="w-full mt-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition-colors flex justify-center items-center">
                                 Withdraw Funds
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
