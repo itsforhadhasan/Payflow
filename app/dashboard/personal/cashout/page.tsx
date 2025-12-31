@@ -9,6 +9,7 @@ export default function CashOutPage() {
     const [amount, setAmount] = useState('');
     const [agent, setAgent] = useState('');
     const [step, setStep] = useState(1);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     return (
         <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#0f172a] font-sans">
@@ -96,7 +97,10 @@ export default function CashOutPage() {
                                     placeholder="Enter PIN"
                                     className="w-full bg-white dark:bg-[#1e293b] border-2 border-gray-100 dark:border-slate-800 focus:border-[#E2136E] rounded-xl py-3 px-4 text-center font-bold text-lg tracking-widest outline-none transition-colors"
                                 />
-                                <button className="w-full bg-[#E2136E] text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-pink-500/30">
+                                <button
+                                    onClick={() => setShowSuccess(true)}
+                                    className="w-full bg-[#E2136E] text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-pink-500/30"
+                                >
                                     Confirm Cash Out
                                 </button>
                                 <button onClick={() => setStep(1)} className="text-sm text-gray-400 font-bold hover:text-gray-600 block w-full py-2">
@@ -104,6 +108,42 @@ export default function CashOutPage() {
                                 </button>
                             </div>
                         </div>
+                    )}
+
+                    {/* Success Modal */}
+                    {showSuccess && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm flex items-center justify-center p-4 left-0 top-0"
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                className="bg-white dark:bg-[#1e293b] w-full max-w-sm rounded-[2.5rem] p-8 relative text-center"
+                            >
+                                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600 dark:text-green-400">
+                                    <ShieldCheck className="w-10 h-10" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Cash Out Successful!</h3>
+                                <p className="text-gray-500 dark:text-slate-400 mb-8">
+                                    You have successfully cashed out ৳{amount} at agent {agent || '01700000000'}.
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        setShowSuccess(false);
+                                        setStep(1);
+                                        setAmount('');
+                                        setAgent('');
+                                    }}
+                                    className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-4 rounded-2xl hover:scale-[1.02] transition-transform"
+                                >
+                                    Done
+                                </button>
+                            </motion.div>
+                        </motion.div>
                     )}
 
                 </div>

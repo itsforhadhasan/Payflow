@@ -437,7 +437,7 @@ export default function PersonalDashboard() {
             </AnimatePresence>
 
             {/* bKash Style Fixed Bottom Nav */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-[#1e293b] border-t border-gray-100 dark:border-slate-800 z-50 px-6 pb-6 pt-2 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+            <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#1e293b] border-t border-gray-100 dark:border-slate-800 z-50 px-6 pb-6 pt-2 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
                 <div className="flex justify-between items-end relative max-w-sm mx-auto">
 
                     {/* Home */}
