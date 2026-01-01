@@ -69,7 +69,7 @@ export default function AdminDashboard() {
 
     return (
         <div className="min-h-screen bg-[#1F0344] transition-colors duration-300 pb-32 md:pb-16 overflow-x-hidden">
-            <div className="max-w-5xl mx-auto md:pt-8 px-0 md:px-4">
+            <div className="max-w-7xl mx-auto md:pt-8 px-0 md:px-4">
 
                 {/* Hero Section - Admin Dark Theme */}
                 <div className="relative md:rounded-[2.5rem] bg-slate-800 dark:bg-slate-900 shadow-2xl shadow-slate-500/20 z-10 transition-all duration-500">
@@ -120,11 +120,11 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Main Content */}
-                <div className="px-6 md:px-0 mt-8 md:mt-10">
-                    <h2 className="text-3xl font-bold font-heading text-white mb-8">System Overview</h2>
+                <div className="px-4 md:px-8 lg:px-12 mt-8 md:mt-10 space-y-8">
+                    <h2 className="text-3xl md:text-4xl font-bold font-heading text-white">System Overview</h2>
 
-                    {/* Stat Cards with Icons */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    {/* Stat Cards with Icons - Enhanced Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {[
                             { label: 'Total Users', value: '15,240', icon: Users, color: 'bg-[#1f0344]', gradient: 'from-[#1f0344] to-purple-700', bgLight: 'bg-purple-50 dark:bg-[#1f0344]/20' },
                             { label: 'Daily Volume', value: '৳ 2.4M', icon: Activity, color: 'bg-[#1f0344]', gradient: 'from-[#1f0344] to-purple-700', bgLight: 'bg-purple-50 dark:bg-[#1f0344]/20' },
@@ -133,12 +133,12 @@ export default function AdminDashboard() {
                         ].map((stat, i) => (
                             <div key={i} className={`p-6 rounded-2xl bg-gradient-to-br from-[#2d1b4e] to-[#1f0344] border border-purple-600/50 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1`}>
                                 <div className="flex items-center justify-between">
-                                    <div>
+                                    <div className="flex-1">
                                         <p className="text-purple-300 text-sm font-medium">{stat.label}</p>
-                                        <h3 className="text-3xl font-bold font-heading text-white mt-2">{stat.value}</h3>
+                                        <h3 className="text-2xl md:text-3xl font-bold font-heading text-white mt-2">{stat.value}</h3>
                                     </div>
-                                    <div className={cn(`w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 transition-transform`, `bg-gradient-to-br ${stat.gradient}`)}>
-                                        <stat.icon className="w-8 h-8" />
+                                    <div className={cn(`w-14 md:w-16 h-14 md:h-16 rounded-2xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 transition-transform flex-shrink-0`, `bg-gradient-to-br ${stat.gradient}`)}>
+                                        <stat.icon className="w-6 md:w-8 h-6 md:h-8" />
                                     </div>
                                 </div>
                                 <div className={cn("mt-4 h-1 rounded-full bg-gradient-to-r", stat.gradient)}></div>
@@ -146,13 +146,13 @@ export default function AdminDashboard() {
                         ))}
                     </div>
 
-                    {/* Charts and Representative Profiles */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    {/* Charts and Representative Profiles - Responsive Grid */}
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
                         {/* Line Chart - Daily Transactions */}
-                        <div className="lg:col-span-2 bg-gradient-to-br from-[#2d1b4e] via-[#1f0344] to-[#2d1b4e] border border-purple-700/50 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300">
-                            <div className="flex items-center justify-between mb-6">
+                        <div className="xl:col-span-2 bg-gradient-to-br from-[#2d1b4e] via-[#1f0344] to-[#2d1b4e] border border-purple-700/50 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                                 <h3 className="font-bold text-lg bg-gradient-to-r from-purple-300 to-purple-100 bg-clip-text text-transparent">Transaction Volume (Past 7 Days)</h3>
-                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-600/30 text-purple-300 border border-purple-600/50">📈 Trend</span>
+                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-600/30 text-purple-300 border border-purple-600/50 whitespace-nowrap">📈 Trend</span>
                             </div>
                             <div className="relative h-72 bg-gradient-to-b from-purple-50/50 to-white dark:from-[#1f0344]/30 dark:to-transparent rounded-xl p-4">
                                 {/* Grid Background */}
@@ -215,18 +215,18 @@ export default function AdminDashboard() {
                             </div>
                             
                             {/* Day Labels */}
-                            <div className="flex justify-between px-6 mt-6 text-xs font-bold text-gray-700 dark:text-purple-300">
-                                <span className="flex flex-col items-center"><span>📅</span>Mon</span>
-                                <span>Tue</span>
-                                <span>Wed</span>
-                                <span>Thu</span>
-                                <span>Fri</span>
-                                <span>Sat</span>
-                                <span>Sun</span>
+                            <div className="flex justify-between px-6 mt-6 text-xs font-bold text-gray-700 dark:text-purple-300 gap-2">
+                                <span className="flex flex-col items-center"><span>📅</span><span className="text-xs">Mon</span></span>
+                                <span className="flex flex-col items-center"><span>Tue</span></span>
+                                <span className="flex flex-col items-center"><span>Wed</span></span>
+                                <span className="flex flex-col items-center"><span>Thu</span></span>
+                                <span className="flex flex-col items-center"><span>Fri</span></span>
+                                <span className="flex flex-col items-center"><span>Sat</span></span>
+                                <span className="flex flex-col items-center"><span>Sun</span></span>
                             </div>
                             
                             {/* Stats Footer */}
-                            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-purple-900/50 flex items-center justify-between">
+                            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-purple-900/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                 <div className="flex items-center gap-3">
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-2.5 h-2.5 bg-[#1f0344] rounded-full animate-pulse"></div>
@@ -244,10 +244,10 @@ export default function AdminDashboard() {
                         <div className="bg-gradient-to-br from-[#2d1b4e] via-[#1f0344] to-[#2d1b4e] border border-purple-700/50 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="font-bold text-lg bg-gradient-to-r from-purple-300 to-purple-100 bg-clip-text text-transparent">Transaction Types</h3>
-                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-600/30 text-purple-300 border border-purple-600/50">💰 Breakdown</span>
+                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-600/30 text-purple-300 border border-purple-600/50 whitespace-nowrap">💰 Breakdown</span>
                             </div>
-                            <div className="flex-1 flex items-center justify-center relative">
-                                <svg viewBox="0 0 100 100" className="w-48 h-48 drop-shadow-xl filter">
+                            <div className="flex-1 flex items-center justify-center relative min-h-48">
+                                <svg viewBox="0 0 100 100" className="w-40 h-40 md:w-48 md:h-48 drop-shadow-xl filter">
                                     <defs>
                                         <filter id="chartShadow" x="-50%" y="-50%" width="200%" height="200%">
                                             <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3" />
@@ -260,12 +260,12 @@ export default function AdminDashboard() {
                                     <circle cx="50" cy="50" r="40" fill="none" stroke="#ef4444" strokeWidth="22" strokeDasharray="31.4 314" strokeDashoffset="-149.15" strokeLinecap="round" filter="url(#chartShadow)" opacity="0.9" />
                                     <circle cx="50" cy="50" r="40" fill="none" stroke="#a855f7" strokeWidth="22" strokeDasharray="23.55 314" strokeDashoffset="-180.55" strokeLinecap="round" filter="url(#chartShadow)" opacity="0.9" />
                                 </svg>
-                                <div className="absolute text-center bg-gradient-to-br from-[#1f0344] to-purple-600 rounded-full w-20 h-20 flex flex-col items-center justify-center shadow-lg">
-                                    <p className="text-2xl font-bold text-white">2.4M</p>
+                                <div className="absolute text-center bg-gradient-to-br from-[#1f0344] to-purple-600 rounded-full w-16 h-16 md:w-20 md:h-20 flex flex-col items-center justify-center shadow-lg">
+                                    <p className="text-xl md:text-2xl font-bold text-white">2.4M</p>
                                     <p className="text-xs text-purple-200 mt-0.5 font-medium">Total</p>
                                 </div>
                             </div>
-                            <div className="mt-8 space-y-2.5">
+                            <div className="mt-6 md:mt-8 space-y-2">
                                 {[
                                     { label: 'Cash In', value: '20%', color: 'bg-gradient-to-r from-blue-500 to-blue-600', textColor: 'text-blue-600', icon: '💳' },
                                     { label: 'Cash Out', value: '15%', color: 'bg-gradient-to-r from-green-500 to-emerald-600', textColor: 'text-green-600', icon: '💸' },
@@ -276,12 +276,12 @@ export default function AdminDashboard() {
                                     <div key={i} className="flex items-center justify-between text-xs group p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1f0344]/50 transition-all duration-200">
                                         <div className="flex items-center gap-2.5 flex-1 min-w-0">
                                             <div className="flex-shrink-0">
-                                                <span className="text-lg">{type.icon}</span>
+                                                <span className="text-base md:text-lg">{type.icon}</span>
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className={cn("h-1.5 rounded-full transition-all group-hover:shadow-md group-hover:h-2", type.color)}></div>
                                             </div>
-                                            <span className="text-gray-700 dark:text-slate-300 font-semibold truncate">{type.label}</span>
+                                            <span className="text-gray-700 dark:text-slate-300 font-semibold text-xs md:text-sm truncate">{type.label}</span>
                                         </div>
                                         <span className={cn("font-bold ml-2 flex-shrink-0", type.textColor)}>{type.value}</span>
                                     </div>
@@ -290,18 +290,18 @@ export default function AdminDashboard() {
                         </div>
                     </div>
 
-                    {/* Representative Profiles and Alerts */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    {/* Representative Profiles and Alerts - Responsive Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                         {/* Active Representatives */}
                         <div className="bg-gradient-to-br from-[#2d1b4e] via-[#1f0344] to-[#2d1b4e] border border-purple-700/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="font-bold text-lg bg-gradient-to-r from-purple-300 to-purple-100 bg-clip-text text-transparent">Active Representatives</h3>
-                                <div className="flex gap-1">
+                                <div className="flex gap-1 flex-shrink-0">
                                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                                     <span className="text-xs font-semibold text-green-600 dark:text-green-400">4 Online</span>
                                 </div>
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-3 max-h-96 overflow-y-auto">
                                 {[
                                     { name: 'Sarah Anderson', role: 'Senior Agent', status: 'online', transactions: '2,450', avatar: '🧑‍💼', badgeColor: 'from-blue-500 to-indigo-600' },
                                     { name: 'John Smith', role: 'Agent', status: 'online', transactions: '1,890', avatar: '👨‍💼', badgeColor: 'from-cyan-500 to-blue-600' },
@@ -313,22 +313,22 @@ export default function AdminDashboard() {
                                         'bg-yellow-50/80 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-900/50': rep.status === 'away',
                                         'bg-gray-50/80 dark:bg-gray-900/10 border-gray-200 dark:border-gray-900/50': rep.status === 'offline'
                                     })}>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-3 flex-1">
-                                                <div className="relative">
-                                                    <div className={cn("w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-lg ring-2 group-hover:scale-110 transition-transform", `bg-gradient-to-br ${rep.badgeColor}`)}>
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+                                            <div className="flex items-center gap-3 flex-1 min-w-0">
+                                                <div className="relative flex-shrink-0">
+                                                    <div className={cn("w-12 sm:w-14 h-12 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl shadow-lg ring-2 group-hover:scale-110 transition-transform", `bg-gradient-to-br ${rep.badgeColor}`)}>
                                                         {rep.avatar}
                                                     </div>
-                                                    <div className={cn("absolute bottom-0 right-0 w-4 h-4 rounded-full border-3 border-white shadow-md ring-1 animate-pulse", {
+                                                    <div className={cn("absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white shadow-md ring-1 animate-pulse", {
                                                         'bg-green-500': rep.status === 'online',
                                                         'bg-yellow-500': rep.status === 'away',
                                                         'bg-gray-400': rep.status === 'offline'
                                                     })}></div>
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-2 flex-wrap">
                                                         <p className="font-bold text-sm text-gray-800 dark:text-white truncate">{rep.name}</p>
-                                                        <span className={cn("text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap", {
+                                                        <span className={cn("text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0", {
                                                             'bg-green-200 text-green-700 dark:bg-green-900/40 dark:text-green-300': rep.status === 'online',
                                                             'bg-yellow-200 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300': rep.status === 'away',
                                                             'bg-gray-200 text-gray-700 dark:bg-gray-900/40 dark:text-gray-300': rep.status === 'offline'
@@ -339,7 +339,7 @@ export default function AdminDashboard() {
                                                     <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{rep.role}</p>
                                                 </div>
                                             </div>
-                                            <div className="text-right ml-4">
+                                            <div className="text-right ml-0 sm:ml-4 flex-shrink-0">
                                                 <p className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{rep.transactions}</p>
                                                 <p className="text-xs text-gray-500 dark:text-slate-400">Transactions</p>
                                             </div>
@@ -367,7 +367,7 @@ export default function AdminDashboard() {
                         <div className="bg-gradient-to-br from-[#2d1b4e] via-[#1f0344] to-[#2d1b4e] border border-purple-700/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="font-bold text-lg bg-gradient-to-r from-purple-300 to-purple-100 bg-clip-text text-transparent">Alerts & Actions</h3>
-                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-600/30 text-purple-300 border border-purple-600/50">{visibleAlerts.length} Items</span>
+                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-600/30 text-purple-300 border border-purple-600/50 whitespace-nowrap flex-shrink-0">{visibleAlerts.length} Items</span>
                             </div>
                             <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-hide pr-2">
                                 {visibleAlerts.map((alert) => (
@@ -377,8 +377,8 @@ export default function AdminDashboard() {
                                         'bg-yellow-50/80 dark:bg-yellow-900/15 border-yellow-200 dark:border-yellow-900/40': alert.color === 'yellow',
                                         'bg-green-50/80 dark:bg-green-900/15 border-green-200 dark:border-green-900/40': alert.color === 'green',
                                     })}>
-                                        <div className="flex items-start justify-between gap-3">
-                                            <div className="flex items-start gap-3 flex-1">
+                                        <div className="flex flex-col sm:flex-row items-start gap-3">
+                                            <div className="flex items-start gap-3 flex-1 min-w-0">
                                                 <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0 shadow-md", {
                                                     'bg-gradient-to-br from-blue-500 to-blue-600': alert.color === 'blue',
                                                     'bg-gradient-to-br from-red-500 to-red-600': alert.color === 'red',
@@ -400,10 +400,10 @@ export default function AdminDashboard() {
                                                         'text-yellow-700 dark:text-yellow-400': alert.color === 'yellow',
                                                         'text-green-700 dark:text-green-400': alert.color === 'green',
                                                     })}>{alert.description}</p>
-                                                    <div className="mt-2 inline-flex gap-2">
+                                                    <div className="mt-2 inline-flex gap-2 flex-wrap">
                                                         <button 
                                                             onClick={() => handleActionAlert(alert.id, alert.action)}
-                                                            className={cn("px-3 py-1.5 text-xs rounded-lg text-white hover:opacity-90 transition-all font-semibold shadow-sm active:scale-95", {
+                                                            className={cn("px-3 py-1.5 text-xs rounded-lg text-white hover:opacity-90 transition-all font-semibold shadow-sm active:scale-95 flex-shrink-0", {
                                                                 'bg-blue-600 hover:bg-blue-700': alert.color === 'blue',
                                                                 'bg-red-600 hover:bg-red-700': alert.color === 'red',
                                                                 'bg-yellow-600 hover:bg-yellow-700': alert.color === 'yellow',
@@ -413,7 +413,7 @@ export default function AdminDashboard() {
                                                         </button>
                                                         <button 
                                                             onClick={() => handleDismissAlert(alert.id)}
-                                                            className={cn("px-3 py-1.5 text-xs rounded-lg hover:opacity-90 transition-all font-semibold active:scale-95", {
+                                                            className={cn("px-3 py-1.5 text-xs rounded-lg hover:opacity-90 transition-all font-semibold active:scale-95 flex-shrink-0", {
                                                                 'bg-blue-200 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-300 dark:hover:bg-blue-900/60': alert.color === 'blue',
                                                                 'bg-red-200 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-300 dark:hover:bg-red-900/60': alert.color === 'red',
                                                                 'bg-yellow-200 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 hover:bg-yellow-300 dark:hover:bg-yellow-900/60': alert.color === 'yellow',
@@ -424,7 +424,7 @@ export default function AdminDashboard() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className={cn("w-2 h-2 rounded-full flex-shrink-0 mt-1.5", {
+                                            <div className={cn("w-2 h-2 rounded-full flex-shrink-0 mt-1.5 sm:mt-0", {
                                                 'bg-blue-500 animate-pulse': alert.color === 'blue',
                                                 'bg-red-500 animate-pulse': alert.color === 'red',
                                                 'bg-yellow-500 animate-pulse': alert.color === 'yellow',
