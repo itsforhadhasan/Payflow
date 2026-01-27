@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronRight as BreadcrumbIcon, ChevronLeft, ChevronRight, Home } from "lucide-react";
+import { ChevronRight as BreadcrumbIcon, ChevronLeft, ChevronRight, Eye, Home } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -152,6 +152,7 @@ export default function TransactionsPage() {
                       <TableHead className="min-w-[100px]">Status</TableHead>
                       <TableHead className="min-w-[140px]">Date</TableHead>
                       <TableHead className="min-w-[200px] max-w-[300px]">Description</TableHead>
+                      <TableHead className="w-[60px]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -179,6 +180,13 @@ export default function TransactionsPage() {
                           </TableCell>
                           <TableCell className="text-sm text-muted-foreground min-w-[200px] max-w-[300px] whitespace-normal break-words">
                             {transaction.description || "—"}
+                          </TableCell>
+                          <TableCell className="w-[60px]">
+                            <Link href={`/dashboard/transactions/${transaction.id}`}>
+                              <Button variant="ghost" size="icon">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </Link>
                           </TableCell>
                         </TableRow>
                       );
