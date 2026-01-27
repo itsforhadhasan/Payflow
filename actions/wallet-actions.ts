@@ -22,6 +22,7 @@ export interface Transaction {
   status: string;
   description?: string;
   createdAt: string;
+  isCredited?: boolean;
   sender?: {
     id: string;
     name: string;

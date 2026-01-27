@@ -25,14 +25,14 @@ export async function middleware(req: NextRequest) {
       algorithms: ["RS256"],
     });
 
-    console.log("Decoded JWT:", decoded);
-
     const userType = decoded.payload.userType as string;
 
     // Define admin-only routes
-    const adminOnlyRoutes = [
-      "/dashboard/admins",
-    ];
+      const adminOnlyRoutes = [
+        "/dashboard/admins",
+        "/dashboard/consumers",
+        "/dashboard/agents",
+      ];
 
     // Define routes that admins cannot access (Consumer/Agent only)
     const userOnlyRoutes = [

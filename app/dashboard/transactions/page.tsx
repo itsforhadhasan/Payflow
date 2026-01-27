@@ -1,6 +1,5 @@
 "use client";
 
-import { PROFILE_FETCH } from "@/actions/profile-actions";
 import { TRANSACTION_HISTORY } from "@/actions/transaction-actions";
 import type { Transaction } from "@/actions/wallet-actions";
 import { Badge } from "@/components/ui/badge";
@@ -33,25 +32,11 @@ export default function TransactionsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [userId, setUserId] = useState<string | null>(null);
   const limit = 20;
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  useEffect(() => {
-    if (userId) {
-      fetchTransactions();
-    }
-  }, [currentPage, typeFilter, statusFilter, userId]);
-
-  const fetchProfile = async () => {
-    const response = await PROFILE_FETCH();
-    if (response.success && response.data) {
-      setUserId(response.data.id);
-    }
-  };
+    fetchTransactions();
+  }, [currentPage, typeFilter, statusFilter]);
 
   const fetchTransactions = async () => {
     setIsLoading(true);
@@ -97,18 +82,6 @@ export default function TransactionsPage() {
 
   const formatCurrency = (amount: number) => {
     return `৳${amount.toLocaleString()}`;
-  };
-
-  const isCredit = (transaction: Transaction) => {
-    // If transaction has a sender and it's not the current user, it's a credit
-    if (transaction.sender && transaction.sender.id !== userId) {
-      return true;
-    }
-    // ADD_MONEY and similar transactions are credits
-    if (["ADD_MONEY", "CASHBACK", "COMMISSION", "ONBOARDING_BONUS", "CASH_IN"].includes(transaction.type)) {
-      return true;
-    }
-    return false;
   };
 
   return (
@@ -182,7 +155,7 @@ export default function TransactionsPage() {
                 </TableHeader>
                 <TableBody>
                   {transactions.map((transaction) => {
-                    const isCreditTransaction = isCredit(transaction);
+                    const isCreditTransaction = transaction.isCredited === true;
                     const colorClass = isCreditTransaction ? "text-green-600" : "text-red-600";
 
                     return (

@@ -16,7 +16,7 @@ export async function PROFILE_FETCH(): Promise<ApiResponse<Profile>> {
     // Map user types to API endpoints
     const endpointMap: Record<string, string> = {
       "Consumer": "/auth/consumer/profile",
-      "Agent": "/agents/auth/profile",
+      "Agent": "/auth/agent/profile",
       "Admin": "/auth/admin/profile",
     };
 

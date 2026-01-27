@@ -47,7 +47,7 @@ export async function TRANSACTION_HISTORY(
       page: page.toString(),
       limit: limit.toString(),
     });
-    
+
     if (type) params.append("type", type);
     if (status) params.append("status", status);
 

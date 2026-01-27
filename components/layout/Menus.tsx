@@ -19,6 +19,24 @@ export const MENU_ITEMS: MenuItem[] = [
     icon: <Home className="h-4 w-4" />,
   },
   {
+    label: "Consumers",
+    href: "/dashboard/consumers",
+    icon: <Users className="h-4 w-4" />,
+    allowedUserTypes: ["Admin"],
+  },
+  {
+    label: "Agents",
+    href: "/dashboard/agents",
+    icon: <Users className="h-4 w-4" />,
+    allowedUserTypes: ["Admin"],
+  },
+  {
+    label: "Admins",
+    href: "/dashboard/admins",
+    icon: <Users className="h-4 w-4" />,
+    allowedUserTypes: ["Admin"],
+  },
+  {
     label: "Transactions",
     href: "/dashboard/transactions",
     icon: <ArrowRightLeft className="h-4 w-4" />,
@@ -47,12 +65,6 @@ export const MENU_ITEMS: MenuItem[] = [
         allowedUserTypes: ["Consumer"],
       },
     ],
-  },
-  {
-    label: "Admins",
-    href: "/dashboard/admins",
-    icon: <Users className="h-4 w-4" />,
-    allowedUserTypes: ["Admin"],
   },
 ];
 
