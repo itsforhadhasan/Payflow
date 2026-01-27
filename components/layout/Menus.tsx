@@ -1,5 +1,5 @@
 import { getUserTypeFromHeader } from "@/utils/auth";
-import { ArrowRightLeft, Banknote, History, Home, Package2, Plus, Send, Users } from "lucide-react";
+import { ArrowRightLeft, Banknote, Building2, FileText, History, Home, Package2, Plus, Send, Users } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import MenuItem from "./MenuItem";
@@ -31,9 +31,9 @@ export const MENU_ITEMS: MenuItem[] = [
     allowedUserTypes: ["Admin"],
   },
   {
-    label: "Admins",
-    href: "/dashboard/admins",
-    icon: <Users className="h-4 w-4" />,
+    label: "Billers",
+    href: "/dashboard/billers",
+    icon: <FileText className="h-4 w-4" />,
     allowedUserTypes: ["Admin"],
   },
   {
@@ -69,6 +69,24 @@ export const MENU_ITEMS: MenuItem[] = [
         href: "/dashboard/transactions/cash-in",
         icon: <Banknote className="h-4 w-4" />,
         allowedUserTypes: ["Agent"],
+      },
+    ],
+  },
+  {
+    label: "Bank Transfer",
+    href: "/dashboard/bank-transfer",
+    icon: <Building2 className="h-4 w-4" />,
+    allowedUserTypes: ["Consumer", "Agent"],
+    subItems: [
+      {
+        label: "New Transfer",
+        href: "/dashboard/bank-transfer",
+        icon: <Plus className="h-4 w-4" />,
+      },
+      {
+        label: "History",
+        href: "/dashboard/bank-transfer/history",
+        icon: <History className="h-4 w-4" />,
       },
     ],
   },

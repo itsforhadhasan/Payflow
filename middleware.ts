@@ -32,6 +32,7 @@ export async function middleware(req: NextRequest) {
         "/dashboard/admins",
         "/dashboard/consumers",
         "/dashboard/agents",
+        "/dashboard/billers",
       ];
 
     // Define routes that admins cannot access (Consumer/Agent only)
