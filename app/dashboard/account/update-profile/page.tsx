@@ -17,54 +17,43 @@ import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useImmer } from "use-immer";
 import { z } from "zod";
+import { isAdminProfile } from "@/types";
 
-const FormSchema = z.object({
-  firstname: z.string().min(1, "First name is required"),
-  lastname: z.string().min(1, "Last name is required"),
+// Schema for User (Consumer/Agent)
+const UserFormSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Please enter a valid email"),
 });
 
-type ProfileFormValues = z.infer<typeof FormSchema>;
+// Schema for Admin
+const AdminFormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Please enter a valid email"),
+});
 
-interface ProfileField {
-  name: keyof ProfileFormValues;
-  label: string;
-  placeholder: string;
-  value: string;
-}
+type UserFormValues = z.infer<typeof UserFormSchema>;
+type AdminFormValues = z.infer<typeof AdminFormSchema>;
 
 export default function UpdateProfile() {
-  const [fields, updateFields] = useImmer<ProfileField[]>([
-    {
-      name: "firstname",
-      label: "First Name",
-      placeholder: "John",
-      value: "",
-    },
-    {
-      name: "lastname",
-      label: "Last Name",
-      placeholder: "Doe",
-      value: "",
-    },
-    {
-      name: "email",
-      label: "Email",
-      placeholder: "admin@example.com",
-      value: "",
-    },
-  ]);
   const [loaded, setLoaded] = useState(false);
-  const [userType, setUserType] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm({
-    resolver: zodResolver(FormSchema),
+  const userForm = useForm<UserFormValues>({
+    resolver: zodResolver(UserFormSchema),
     defaultValues: {
-      firstname: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+    },
+  });
+
+  const adminForm = useForm<AdminFormValues>({
+    resolver: zodResolver(AdminFormSchema),
+    defaultValues: {
+      name: "",
       email: "",
     },
   });
@@ -76,27 +65,26 @@ export default function UpdateProfile() {
       if (response.success && response.data) {
         const profile = response.data;
 
-        if (profile && profile.email && profile.firstName && profile.lastName) {
-          updateFields((draft) => {
-            draft[0].value = profile.firstName;
-            draft[1].value = profile.lastName;
-            draft[2].value = profile.email;
-          });
-
-          form.reset({
-            firstname: profile.firstName,
-            lastname: profile.lastName,
+        if (isAdminProfile(profile)) {
+          setIsAdmin(true);
+          adminForm.reset({
+            name: profile.name,
             email: profile.email,
           });
-
-          setUserType(profile.userType || null);
-          setLoaded(true);
+        } else {
+          setIsAdmin(false);
+          userForm.reset({
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            email: profile.email,
+          });
         }
+        setLoaded(true);
       }
     })();
-  }, [updateFields, form]);
+  }, [userForm, adminForm]);
 
-  function onSubmit(data: ProfileFormValues) {
+  function onUserSubmit(data: UserFormValues) {
     startTransition(async () => {
       const response = await PROFILE_UPDATE(data);
 
@@ -105,7 +93,25 @@ export default function UpdateProfile() {
       } else {
         if (response.data && 'errors' in response.data && Array.isArray(response.data.errors) && response.data.errors.length > 0) {
           const firstError = response.data.errors[0] as { message: string };
+          toast.error(firstError.message);
+        } else if (response.data && 'message' in response.data) {
+          toast.error(response.data.message as string);
+        } else {
+          toast.error(response.error || "An error occurred");
+        }
+      }
+    });
+  }
 
+  function onAdminSubmit(data: AdminFormValues) {
+    startTransition(async () => {
+      const response = await PROFILE_UPDATE(data);
+
+      if (response.success) {
+        toast.success("Profile updated successfully");
+      } else {
+        if (response.data && 'errors' in response.data && Array.isArray(response.data.errors) && response.data.errors.length > 0) {
+          const firstError = response.data.errors[0] as { message: string };
           toast.error(firstError.message);
         } else if (response.data && 'message' in response.data) {
           toast.error(response.data.message as string);
@@ -145,19 +151,18 @@ export default function UpdateProfile() {
         </div>
 
         <section className="rounded-lg border bg-card p-6 shadow-sm">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {fields.map((item) => (
+          {isAdmin ? (
+            <Form {...adminForm}>
+              <form onSubmit={adminForm.handleSubmit(onAdminSubmit)} className="space-y-6">
                 <FormField
-                  control={form.control}
-                  name={item.name}
-                  key={item.name}
+                  control={adminForm.control}
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{item.label}</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={item.placeholder}
+                          placeholder="System Administrator"
                           {...field}
                           disabled={!loaded}
                         />
@@ -166,12 +171,88 @@ export default function UpdateProfile() {
                     </FormItem>
                   )}
                 />
-              ))}
-              <Button type="submit" disabled={isPending || !loaded}>
-                {isPending ? "Updating..." : "Update Profile"}
-              </Button>
-            </form>
-          </Form>
+                <FormField
+                  control={adminForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="admin@example.com"
+                          {...field}
+                          disabled={!loaded}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" disabled={isPending || !loaded}>
+                  {isPending ? "Updating..." : "Update Profile"}
+                </Button>
+              </form>
+            </Form>
+          ) : (
+            <Form {...userForm}>
+              <form onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-6">
+                <FormField
+                  control={userForm.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="John"
+                          {...field}
+                          disabled={!loaded}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={userForm.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Doe"
+                          {...field}
+                          disabled={!loaded}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={userForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="user@example.com"
+                          {...field}
+                          disabled={!loaded}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" disabled={isPending || !loaded}>
+                  {isPending ? "Updating..." : "Update Profile"}
+                </Button>
+              </form>
+            </Form>
+          )}
         </section>
       </div>
     </main>

@@ -6,7 +6,11 @@ import type { Admin, AdminFilter, AdminListResponse, ApiResponse } from "@/types
 
 export async function ADMIN_CREATE(data: Partial<Admin>): Promise<ApiResponse<Admin>> {
   try {
-    const response = await x_axios.post("/admin/register", data);
+    const response = await x_axios.post("/admin/register", {
+      email: data.email,
+      password: data.password,
+      name: data.name,
+    });
 
     return { success: true, data: response.data.data.admin };
   } catch (error) {

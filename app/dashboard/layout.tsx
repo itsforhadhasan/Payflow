@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { getProfileDisplayName, isUserProfile } from "@/types";
 
 export default async function AuthenticatedLayout({
   children,
@@ -64,14 +65,16 @@ export default async function AuthenticatedLayout({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Hi {profile?.firstName}</DropdownMenuLabel>
+              <DropdownMenuLabel>Hi {profile ? getProfileDisplayName(profile) : 'User'}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <Link href="/dashboard/account">
                 <DropdownMenuItem>Account Settings</DropdownMenuItem>
               </Link>
-              <Link href="/dashboard/account/update-profile">
-                <DropdownMenuItem>Update Profile</DropdownMenuItem>
-              </Link>
+              {profile && isUserProfile(profile) && (
+                <Link href="/dashboard/account/update-profile">
+                  <DropdownMenuItem>Update Profile</DropdownMenuItem>
+                </Link>
+              )}
               <Link href="/dashboard/account/change-password">
                 <DropdownMenuItem>Change Password</DropdownMenuItem>
               </Link>

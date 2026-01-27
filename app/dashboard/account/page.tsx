@@ -3,6 +3,7 @@
 import { PROFILE_FETCH } from "@/actions/profile-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Profile, isAdminProfile, isUserProfile } from "@/types";
 import {
   ChevronRight,
   Home,
@@ -12,7 +13,6 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Profile } from "@/types";
 
 const InfoItem = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div className="space-y-1">
@@ -82,24 +82,46 @@ export default function AccountPage() {
                 </p>
               </div>
               <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <InfoItem label="First Name">{profile.firstName}</InfoItem>
-                <InfoItem label="Last Name">{profile.lastName}</InfoItem>
-                <InfoItem label="Email">{profile.email}</InfoItem>
-                <InfoItem label="USER ID">{profile.id}</InfoItem>
-                <InfoItem label="Account Status">
-                  <Badge variant={profile.status ? "default" : "secondary"}>
-                    {profile.status ? "Active" : "Inactive"}
-                  </Badge>
-                </InfoItem>
+                {isAdminProfile(profile) ? (
+                  <>
+                    <InfoItem label="Name">{profile.name}</InfoItem>
+                    <InfoItem label="Email">{profile.email}</InfoItem>
+                    <InfoItem label="Admin ID">{profile.id}</InfoItem>
+                    <InfoItem label="Account Status">
+                      <Badge variant={profile.status === "ACTIVE" ? "default" : "secondary"}>
+                        {profile.status}
+                      </Badge>
+                    </InfoItem>
+                    {profile.lastLoginAt && (
+                      <InfoItem label="Last Login">
+                        {new Date(profile.lastLoginAt).toLocaleString()}
+                      </InfoItem>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <InfoItem label="First Name">{profile.firstName}</InfoItem>
+                    <InfoItem label="Last Name">{profile.lastName}</InfoItem>
+                    <InfoItem label="Email">{profile.email}</InfoItem>
+                    <InfoItem label="USER ID">{profile.id}</InfoItem>
+                    <InfoItem label="Account Status">
+                      <Badge variant={profile.status === "ACTIVE" ? "default" : "secondary"}>
+                        {profile.status}
+                      </Badge>
+                    </InfoItem>
+                  </>
+                )}
               </dl>
-              <div className="mt-6">
-                <Link href="/dashboard/account/update-profile">
-                  <Button variant="outline" size="sm">
-                    <User className="mr-2 h-4 w-4" />
-                    Update Profile
-                  </Button>
-                </Link>
-              </div>
+              {isUserProfile(profile) && (
+                <div className="mt-6">
+                  <Link href="/dashboard/account/update-profile">
+                    <Button variant="outline" size="sm">
+                      <User className="mr-2 h-4 w-4" />
+                      Update Profile
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </section>
 
             {/* Security Settings Section */}
@@ -131,23 +153,28 @@ export default function AccountPage() {
               </div>
             </section>
 
-            {/* Contact Information Section */}
-            {(profile.phone || profile.address) && (
+            {/* Contact Information Section - Only for User profiles */}
+            {isUserProfile(profile) && (profile.phone || profile.dateOfBirth || profile.nidNumber) && (
               <section className="rounded-lg border bg-card p-6 shadow-sm">
                 <div className="mb-4">
                   <h2 className="text-base font-semibold">
-                    Contact Information
+                    Additional Information
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    Additional contact details
+                    Additional contact and personal details
                   </p>
                 </div>
                 <dl className="grid gap-4 sm:grid-cols-2">
                   {profile.phone && (
                     <InfoItem label="Phone">{profile.phone}</InfoItem>
                   )}
-                  {profile.address && (
-                    <InfoItem label="Address">{profile.address}</InfoItem>
+                  {profile.dateOfBirth && (
+                    <InfoItem label="Date of Birth">
+                      {new Date(profile.dateOfBirth).toLocaleDateString()}
+                    </InfoItem>
+                  )}
+                  {profile.nidNumber && (
+                    <InfoItem label="NID Number">{profile.nidNumber}</InfoItem>
                   )}
                 </dl>
               </section>
@@ -162,12 +189,14 @@ export default function AccountPage() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Link href="/dashboard/account/update-profile">
-                  <Button variant="outline" size="sm">
-                    <User className="mr-2 h-4 w-4" />
-                    Update Profile
-                  </Button>
-                </Link>
+                {isUserProfile(profile) && (
+                  <Link href="/dashboard/account/update-profile">
+                    <Button variant="outline" size="sm">
+                      <User className="mr-2 h-4 w-4" />
+                      Update Profile
+                    </Button>
+                  </Link>
+                )}
                 <Link href="/dashboard/account/change-password">
                   <Button variant="outline" size="sm">
                     <Lock className="mr-2 h-4 w-4" />

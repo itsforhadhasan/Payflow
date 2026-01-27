@@ -117,3 +117,46 @@ export async function AUTH_CHANGE_PASSWORD(
   }
 }
 
+export async function AUTH_REGISTER_CONSUMER(data: {
+  email: string;
+  phone: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth?: string;
+  nidNumber?: string;
+}): Promise<ApiResponse> {
+  try {
+    const response = await x_axios.post("/auth/consumer/register", {
+      ...data,
+      role: "CONSUMER",
+    });
+
+    return { success: true, data: response.data };
+  } catch (error) {
+    return formatError(error);
+  }
+}
+
+export async function AUTH_REGISTER_AGENT(data: {
+  email: string;
+  phone: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  businessName: string;
+  businessAddress: string;
+  dateOfBirth?: string;
+  nidNumber?: string;
+}): Promise<ApiResponse> {
+  try {
+    const response = await x_axios.post("/auth/agent/register", {
+      ...data,
+    });
+
+    return { success: true, data: response.data };
+  } catch (error) {
+    return formatError(error);
+  }
+}
+

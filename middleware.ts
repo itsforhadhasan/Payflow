@@ -1,5 +1,5 @@
 import { jwtVerify } from "jose";
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { importPublicKey } from "./utils/auth";
 
 export async function middleware(req: NextRequest) {
@@ -34,13 +34,28 @@ export async function middleware(req: NextRequest) {
       "/dashboard/admins",
     ];
 
+    // Define routes that admins cannot access (Consumer/Agent only)
+    const userOnlyRoutes = [
+      "/dashboard/account/update-profile",
+    ];
+
     // Check if the current path is admin-only
     const isAdminOnlyRoute = adminOnlyRoutes.some((route) =>
       pathname.startsWith(route),
     );
 
+    // Check if the current path is user-only (Consumer/Agent)
+    const isUserOnlyRoute = userOnlyRoutes.some((route) =>
+      pathname.startsWith(route),
+    );
+
     // If trying to access admin-only route without admin privileges, redirect to dashboard
     if (isAdminOnlyRoute && userType !== "Admin") {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+
+    // If admin trying to access user-only route, redirect to dashboard
+    if (isUserOnlyRoute && userType === "Admin") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
