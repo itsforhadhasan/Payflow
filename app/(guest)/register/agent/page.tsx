@@ -36,25 +36,54 @@ export default function AgentRegister() {
     // Validate password match
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // Validate date of birth (must be at least 18 years old)
+    if (!formData.dateOfBirth) {
+      setError("Date of birth is required");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const birthDate = new Date(formData.dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    if (age < 18) {
+      setError("You must be at least 18 years old to register");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
     startTransition(async () => {
       const { confirmPassword, ...registrationData } = formData;
       
+      // Convert date from yyyy-mm-dd to dd-mm-yyyy
+      const [year, month, day] = registrationData.dateOfBirth.split('-');
+      const formattedDate = `${day}-${month}-${year}`;
+
       const response = await AUTH_REGISTER_AGENT({
         ...registrationData,
-        dateOfBirth: registrationData.dateOfBirth || undefined,
+        dateOfBirth: formattedDate,
         nidNumber: registrationData.nidNumber || undefined,
       });
 
       if (response.success) {
         setSuccess("Agent registration successful! Your account is pending admin approval. You will be notified once approved. Redirecting to login...");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => {
           router.push("/");
         }, 3000);
       } else {
         setError(response.error || "Registration failed. Please try again.");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   };
@@ -155,13 +184,18 @@ export default function AgentRegister() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                <Label htmlFor="dateOfBirth">Date of Birth *</Label>
                 <Input
                   id="dateOfBirth"
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={(e) => handleChange("dateOfBirth", e.target.value)}
+                  required
+                  max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
                 />
+                <p className="text-xs text-muted-foreground">
+                  You must be at least 18 years old
+                </p>
               </div>
 
               <div className="grid gap-2">

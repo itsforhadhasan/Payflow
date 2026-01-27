@@ -1,6 +1,11 @@
 "use client";
 
+import { PROFILE_FETCH } from "@/actions/profile-actions";
+import { WALLET_FETCH, type WalletData } from "@/actions/wallet-actions";
+import WalletOverview from "@/components/dashboard/WalletOverview";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Profile } from "@/types";
+import { isUserProfile } from "@/types";
 import {
   Building2,
   Crown,
@@ -14,7 +19,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-type MetricKey = 
+type MetricKey =
   | "new_projects_30d"
   | "new_admins_30d"
   | "new_participants_30d"
@@ -103,7 +108,38 @@ const getCardConfig = (key: MetricKey): CardConfig => {
 
 export default function Dashboard() {
   const [analytics, setAnalytics] = useState<AnalyticsCard[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [wallet, setWallet] = useState<WalletData | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+
+      // Fetch profile to determine user type
+      const profileResponse = await PROFILE_FETCH();
+      if (profileResponse.success && profileResponse.data) {
+        setProfile(profileResponse.data);
+
+        // Only fetch wallet for Consumer/Agent users
+        if (isUserProfile(profileResponse.data)) {
+          const walletResponse = await WALLET_FETCH();
+          console.log("Dashboard - Wallet fetch response:", walletResponse);
+          if (walletResponse.success && walletResponse.data) {
+            console.log("Dashboard - Setting wallet data:", walletResponse.data);
+            setWallet(walletResponse.data);
+          } else {
+            console.error("Dashboard - Failed to fetch wallet:", walletResponse.error);
+            toast.error("Failed to fetch wallet data");
+          }
+        }
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   // Separate cards into 30-day and total metrics
   const recentMetrics = analytics.filter((card) => card.key.includes("30d"));
@@ -121,9 +157,27 @@ export default function Dashboard() {
 
         {isLoading ? (
           <div className="rounded-lg border bg-card p-6 text-sm text-muted-foreground">
-            Loading analytics...
+            Loading dashboard...
           </div>
         ) : (
+          <>
+            {/* Wallet Overview - Only for Consumer/Agent */}
+            {profile && isUserProfile(profile) && wallet && (
+              <section>
+                <div className="mb-4">
+                  <h2 className="text-base font-semibold">Wallet Overview</h2>
+                  <p className="text-sm text-muted-foreground">
+                    Your balance and spending limits
+                  </p>
+                </div>
+                <WalletOverview wallet={wallet} />
+              </section>
+            )}
+          </>
+        )}
+
+        {/* Analytics Section (Currently empty) */}
+        {!isLoading && (
           <div className="space-y-6">
             {/* Recent Activity (30-day metrics) */}
             {recentMetrics.length > 0 && (
@@ -203,9 +257,9 @@ export default function Dashboard() {
               </section>
             )}
 
-            {analytics.length === 0 && !isLoading && (
+            {analytics.length === 0 && profile && !isUserProfile(profile) && (
               <div className="rounded-lg border bg-card p-6 text-sm text-muted-foreground">
-                No analytics data available.
+                Welcome to your dashboard. Analytics coming soon.
               </div>
             )}
           </div>

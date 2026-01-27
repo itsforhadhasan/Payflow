@@ -28,6 +28,7 @@ export default function Login() {
         router.push("/dashboard");
       } else {
         setError(response.error || "An error occurred");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   };
