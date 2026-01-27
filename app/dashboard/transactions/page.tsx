@@ -134,56 +134,58 @@ export default function TransactionsPage() {
         </div>
 
         {/* Transactions Table */}
-        <div className="rounded-lg border bg-card">
+        <div className="rounded-lg border bg-card overflow-hidden">
           {isLoading ? (
             <div className="p-6 text-sm text-muted-foreground">Loading transactions...</div>
           ) : transactions.length === 0 ? (
             <div className="p-6 text-sm text-muted-foreground">No transactions found.</div>
           ) : (
             <>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Transaction ID</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Fee</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Description</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {transactions.map((transaction) => {
-                    const isCreditTransaction = transaction.isCredited === true;
-                    const colorClass = isCreditTransaction ? "text-green-600" : "text-red-600";
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="min-w-[180px]">Transaction ID</TableHead>
+                      <TableHead className="min-w-[120px]">Type</TableHead>
+                      <TableHead className="min-w-[100px]">Amount</TableHead>
+                      <TableHead className="min-w-[80px]">Fee</TableHead>
+                      <TableHead className="min-w-[100px]">Status</TableHead>
+                      <TableHead className="min-w-[140px]">Date</TableHead>
+                      <TableHead className="min-w-[200px] max-w-[300px]">Description</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {transactions.map((transaction) => {
+                      const isCreditTransaction = transaction.isCredited === true;
+                      const colorClass = isCreditTransaction ? "text-green-600" : "text-red-600";
 
-                    return (
-                      <TableRow key={transaction.id}>
-                        <TableCell className={`font-mono text-xs ${colorClass}`}>
-                          {transaction.transactionId}
-                        </TableCell>
-                        <TableCell className={colorClass}>
-                          {getTypeLabel(transaction.type)}
-                        </TableCell>
-                        <TableCell className={`font-semibold ${colorClass}`}>
-                          {isCreditTransaction ? "+" : "−"}{formatCurrency(transaction.amount)}
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {formatCurrency(transaction.fee)}
-                        </TableCell>
-                        <TableCell>{getStatusBadge(transaction.status)}</TableCell>
-                        <TableCell className="text-sm">
-                          {moment(transaction.createdAt).format("MMM DD, YYYY HH:mm")}
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {transaction.description || "—"}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                      return (
+                        <TableRow key={transaction.id}>
+                          <TableCell className={`font-mono text-xs ${colorClass} min-w-[180px]`}>
+                            {transaction.transactionId}
+                          </TableCell>
+                          <TableCell className={`${colorClass} min-w-[120px]`}>
+                            {getTypeLabel(transaction.type)}
+                          </TableCell>
+                          <TableCell className={`font-semibold ${colorClass} min-w-[100px]`}>
+                            {isCreditTransaction ? "+" : "−"}{formatCurrency(transaction.amount)}
+                          </TableCell>
+                          <TableCell className="text-muted-foreground min-w-[80px]">
+                            {formatCurrency(transaction.fee)}
+                          </TableCell>
+                          <TableCell className="min-w-[100px]">{getStatusBadge(transaction.status)}</TableCell>
+                          <TableCell className="text-sm min-w-[140px] whitespace-nowrap">
+                            {moment(transaction.createdAt).format("MMM DD, YYYY HH:mm")}
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground min-w-[200px] max-w-[300px] whitespace-normal break-words">
+                            {transaction.description || "—"}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
 
               {/* Pagination */}
               <div className="flex items-center justify-between border-t px-6 py-4">

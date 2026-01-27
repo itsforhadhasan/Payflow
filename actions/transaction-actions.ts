@@ -36,6 +36,12 @@ export interface CashOutData {
   description?: string;
 }
 
+export interface CashInData {
+  consumerIdentifier: string;
+  amount: number;
+  description?: string;
+}
+
 export async function TRANSACTION_HISTORY(
   page: number = 1,
   limit: number = 20,
@@ -92,6 +98,16 @@ export async function SEND_MONEY(data: SendMoneyData): Promise<ApiResponse> {
 export async function CASH_OUT(data: CashOutData): Promise<ApiResponse> {
   try {
     const response = await x_axios.post("/transactions/cash-out", data);
+
+    return { success: true, data: response.data };
+  } catch (error) {
+    return formatError(error);
+  }
+}
+
+export async function CASH_IN(data: CashInData): Promise<ApiResponse> {
+  try {
+    const response = await x_axios.post("/transactions/cash-in", data);
 
     return { success: true, data: response.data };
   } catch (error) {

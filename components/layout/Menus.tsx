@@ -64,6 +64,12 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: <Banknote className="h-4 w-4" />,
         allowedUserTypes: ["Consumer"],
       },
+      {
+        label: "Cash In",
+        href: "/dashboard/transactions/cash-in",
+        icon: <Banknote className="h-4 w-4" />,
+        allowedUserTypes: ["Agent"],
+      },
     ],
   },
 ];
