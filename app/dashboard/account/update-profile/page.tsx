@@ -76,16 +76,16 @@ export default function UpdateProfile() {
       if (response.success && response.data) {
         const profile = response.data;
 
-        if (profile && profile.email && profile.firstname && profile.lastname) {
+        if (profile && profile.email && profile.firstName && profile.lastName) {
           updateFields((draft) => {
-            draft[0].value = profile.firstname;
-            draft[1].value = profile.lastname;
+            draft[0].value = profile.firstName;
+            draft[1].value = profile.lastName;
             draft[2].value = profile.email;
           });
 
           form.reset({
-            firstname: profile.firstname,
-            lastname: profile.lastname,
+            firstname: profile.firstName,
+            lastname: profile.lastName,
             email: profile.email,
           });
 

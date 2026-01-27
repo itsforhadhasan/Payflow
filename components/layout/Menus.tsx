@@ -23,11 +23,6 @@ export const MENU_ITEMS: MenuItem[] = [
     icon: <Users className="h-4 w-4" />,
     allowedUserTypes: ["Admin"],
   },
-  {
-    label: "Patients",
-    href: "/dashboard/patients",
-    icon: <UserCircle className="h-4 w-4" />,
-  },
 ];
 
 function filterMenusByUserType(userType: string | null) {

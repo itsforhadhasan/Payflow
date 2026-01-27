@@ -82,8 +82,8 @@ export default function AccountPage() {
                 </p>
               </div>
               <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <InfoItem label="First Name">{profile.firstname}</InfoItem>
-                <InfoItem label="Last Name">{profile.lastname}</InfoItem>
+                <InfoItem label="First Name">{profile.firstName}</InfoItem>
+                <InfoItem label="Last Name">{profile.lastName}</InfoItem>
                 <InfoItem label="Email">{profile.email}</InfoItem>
                 <InfoItem label="USER ID">{profile.id}</InfoItem>
                 <InfoItem label="Account Status">

@@ -2,13 +2,13 @@
 
 import x_axios from "@/lib/axios";
 import { formatError } from "@/lib/utils";
-import { cookies } from "next/headers";
 import type {
   ApiResponse,
   LoginData,
 } from "@/types";
 import { UserTypes } from "@/types";
 import { getUserTypeFromJWT } from "@/utils/auth";
+import { cookies } from "next/headers";
 
 export async function GET_USER_TYPE(): Promise<ApiResponse<string>> {
   try {
@@ -24,16 +24,25 @@ export async function GET_USER_TYPE(): Promise<ApiResponse<string>> {
 
 export async function AUTH_LOGIN(
   userType: UserTypes,
-  email: string,
+  identifier: string,
   password: string,
 ): Promise<ApiResponse<LoginData>> {
   try {
+    // Map user types to API endpoints
+    const endpointMap: Record<UserTypes, string> = {
+      [UserTypes.Consumer]: "/auth/consumer/login",
+      [UserTypes.Agent]: "/auth/agent/login",
+      [UserTypes.Admin]: "/auth/admin/login",
+    };
+
+    // Admin uses email, Consumer and Agent use identifier
+    const requestBody = userType === UserTypes.Admin
+      ? { email: identifier, password }
+      : { identifier, password };
+
     const response = await x_axios.post(
-      `/auth/${userType.toLowerCase()}/login`,
-      {
-        email,
-        password,
-      },
+      endpointMap[userType],
+      requestBody,
     );
 
     const data = response.data.data as LoginData;
@@ -75,9 +84,9 @@ export async function AUTH_LOGOUT(): Promise<ApiResponse> {
 
 
 export async function AUTH_CHANGE_PASSWORD(
-  current_password: string,
-  new_password: string,
-): Promise<ApiResponse<LoginData>> {
+  currentPassword: string,
+  newPassword: string,
+): Promise<ApiResponse> {
   try {
     const userType = await getUserTypeFromJWT();
 
@@ -85,28 +94,24 @@ export async function AUTH_CHANGE_PASSWORD(
       return { success: false, error: "Invalid session" };
     }
 
-    const response = await x_axios.put(
-      `/auth/${userType.toLowerCase()}/change-password`,
-      {
-        current_password,
-        new_password,
-      },
-    );
+    // Map user types to API endpoints
+    const endpointMap: Record<string, string> = {
+      "Consumer": "/auth/consumer/change-password",
+      "Agent": "/agents/auth/change-password",
+      "Admin": "/auth/admin/change-password",
+    };
 
-    const data = response.data.data as LoginData;
-
-    if (data) {
-      (await cookies()).set("x-jwt", data.token, {
-        httpOnly: true,
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24 * 7,
-      });
-
-      return { success: true, data };
+    const endpoint = endpointMap[userType];
+    if (!endpoint) {
+      return { success: false, error: "Invalid user type" };
     }
 
-    return { success: true, data: response.data };
+    await x_axios.put(endpoint, {
+      currentPassword,
+      newPassword,
+    });
+
+    return { success: true };
   } catch (error) {
     return formatError(error);
   }

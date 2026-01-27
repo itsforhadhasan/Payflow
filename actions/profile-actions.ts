@@ -13,10 +13,25 @@ export async function PROFILE_FETCH(): Promise<ApiResponse<Profile>> {
       return { success: false, error: "Invalid session" };
     }
 
-    const response = await x_axios.get(`/profile/${userType.toLowerCase()}`);
+    // Map user types to API endpoints
+    const endpointMap: Record<string, string> = {
+      "Consumer": "/auth/consumer/profile",
+      "Agent": "/agents/auth/profile",
+      "Admin": "/auth/admin/profile",
+    };
 
-    if (response?.data?.data?.profile) {
-      return { success: true, data: response.data.data.profile };
+    const endpoint = endpointMap[userType];
+    if (!endpoint) {
+      return { success: false, error: "Invalid user type" };
+    }
+
+    const response = await x_axios.get(endpoint);
+
+    // API returns user data in response.data.data.user or response.data.data.admin
+    const userData = response?.data?.data?.user || response?.data?.data?.admin;
+    
+    if (userData) {
+      return { success: true, data: userData };
     } else {
       return { success: false, error: "Profile fetch failed" };
     }
@@ -36,13 +51,25 @@ export async function PROFILE_UPDATE(
       return { success: false, error: "Invalid session" };
     }
 
-    const response = await x_axios.put(
-      `/profile/${userType.toLowerCase()}`,
-      data,
-    );
+    // Map user types to API endpoints
+    const endpointMap: Record<string, string> = {
+      "Consumer": "/auth/consumer/profile",
+      "Agent": "/agents/auth/profile",
+      "Admin": "/auth/admin/profile",
+    };
 
-    if (response?.data?.data?.profile) {
-      return { success: true, data: response.data.data.profile };
+    const endpoint = endpointMap[userType];
+    if (!endpoint) {
+      return { success: false, error: "Invalid user type" };
+    }
+
+    const response = await x_axios.put(endpoint, data);
+
+    // API returns user data in response.data.data.user or response.data.data.admin
+    const userData = response?.data?.data?.user || response?.data?.data?.admin;
+    
+    if (userData) {
+      return { success: true, data: userData };
     } else {
       return { success: false, data: response.data.data };
     }

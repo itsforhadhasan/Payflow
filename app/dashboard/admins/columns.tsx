@@ -117,12 +117,8 @@ export const columns: ColumnDef<Admin>[] = [
     header: "ID",
   },
   {
-    accessorKey: "firstname",
-    header: "First Name",
-  },
-  {
-    accessorKey: "lastname",
-    header: "Last Name",
+    accessorKey: "name",
+    header: "Name",
   },
   {
     accessorKey: "email",

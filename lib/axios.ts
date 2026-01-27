@@ -2,7 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { cookies } from "next/headers";
 
 const x_axios = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.API_URL + "/api",
   timeout: 0,
   withCredentials: true,
 });
@@ -15,6 +15,9 @@ x_axios.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // console log the request url and method
+    console.log(`${config.method} ${config.baseURL} ${config.url}`);
 
     return config;
   },

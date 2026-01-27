@@ -2,13 +2,13 @@
 
 import x_axios from "@/lib/axios";
 import { formatError } from "@/lib/utils";
-import type { ApiResponse, Admin, AdminFilter, AdminListResponse } from "@/types";
+import type { Admin, AdminFilter, AdminListResponse, ApiResponse } from "@/types";
 
 export async function ADMIN_CREATE(data: Partial<Admin>): Promise<ApiResponse<Admin>> {
   try {
-    const response = await x_axios.post("/admin", { ...data, status: true });
+    const response = await x_axios.post("/admin/register", data);
 
-    return { success: true, data: response.data.data.profile };
+    return { success: true, data: response.data.data.admin };
   } catch (error) {
     return formatError(error);
   }

@@ -64,7 +64,7 @@ export default async function AuthenticatedLayout({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Hi {profile?.firstname}</DropdownMenuLabel>
+              <DropdownMenuLabel>Hi {profile?.firstName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <Link href="/dashboard/account">
                 <DropdownMenuItem>Account Settings</DropdownMenuItem>

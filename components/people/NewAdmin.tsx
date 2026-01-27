@@ -27,8 +27,7 @@ import { z } from "zod";
 import { Button } from "../ui/button";
 
 const FormSchema = z.object({
-  firstname: z.string().min(1, "First name is required"),
-  lastname: z.string().min(1, "Last name is required"),
+  name: z.string().min(2, "Name is required (minimum 2 characters)"),
   email: z.string().email("Invalid email format"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
@@ -48,23 +47,16 @@ export default function NewAdmin() {
 
   const [fields, updateFields] = useImmer<AdminField[]>([
     {
-      name: "firstname",
-      label: "First Name",
-      placeholder: "John",
-      value: "",
-      type: "text",
-    },
-    {
-      name: "lastname",
-      label: "Last Name",
-      placeholder: "Doe",
+      name: "name",
+      label: "Name",
+      placeholder: "John Doe",
       value: "",
       type: "text",
     },
     {
       name: "email",
       label: "Email",
-      placeholder: "john@doe.com",
+      placeholder: "admin@example.com",
       value: "",
       type: "email",
     },
@@ -82,8 +74,7 @@ export default function NewAdmin() {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      firstname: "",
-      lastname: "",
+      name: "",
       email: "",
       password: "",
     },
