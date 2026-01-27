@@ -1,33 +1,37 @@
-import type { Metadata } from 'next';
-import { Inter, Outfit } from 'next/font/google';
-import './globals.css';
-import { cn } from '@/lib/utils';
-import { ThemeProvider } from "@/components/theme-provider";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
 
 export const metadata: Metadata = {
-  title: 'PayFlow - Next Gen Mobile Finance',
-  description: 'Secure, Fast, and Simple Mobile Financial Services.',
+  title: "UIU Cash",
+  description: "Project Management System by Oliqon",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={cn("font-sans antialiased bg-background text-foreground", inter.variable, outfit.variable)}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+        <Toaster />
       </body>
     </html>
   );
