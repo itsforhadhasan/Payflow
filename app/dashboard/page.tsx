@@ -1,8 +1,8 @@
 "use client";
 
+import { ANALYTICS_DASHBOARD, type DashboardAnalytics } from "@/actions/admin-analytics-actions";
 import { PROFILE_FETCH } from "@/actions/profile-actions";
 import { WALLET_FETCH, type WalletData } from "@/actions/wallet-actions";
-import { ANALYTICS_DASHBOARD, type DashboardAnalytics } from "@/actions/admin-analytics-actions";
 import WalletOverview from "@/components/dashboard/WalletOverview";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Profile } from "@/types";
@@ -16,8 +16,7 @@ import {
   UserCheck,
   UserPlus,
   Users,
-  UsersRound,
-  Wallet,
+  UsersRound
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -136,7 +135,7 @@ export default function Dashboard() {
             console.error("Dashboard - Failed to fetch wallet:", walletResponse.error);
             toast.error("Failed to fetch wallet data");
           }
-        } 
+        }
         // Fetch analytics for Admin users
         else if (isAdminProfile(profileResponse.data)) {
           const analyticsResponse = await ANALYTICS_DASHBOARD();
@@ -302,24 +301,24 @@ export default function Dashboard() {
                         <p className="text-xs text-muted-foreground">Currently active</p>
                       </CardContent>
                     </Card>
-                    <Card className="border-2 border-gray-200 dark:border-gray-800">
+                    <Card className="border-2 border-cyan-200 dark:border-cyan-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Inactive</CardTitle>
-                        <Users className="h-4 w-4 text-gray-500" />
+                        <CardTitle className="text-sm font-medium">Consumers</CardTitle>
+                        <Users className="h-4 w-4 text-cyan-500" />
                       </CardHeader>
                       <CardContent>
-                        <div className="text-2xl font-bold">{adminAnalytics.users?.inactive || 0}</div>
-                        <p className="text-xs text-muted-foreground">Inactive consumers</p>
+                        <div className="text-2xl font-bold">{adminAnalytics.users?.consumer || 0}</div>
+                        <p className="text-xs text-muted-foreground">Consumer users</p>
                       </CardContent>
                     </Card>
-                    <Card className="border-2 border-red-200 dark:border-red-800">
+                    <Card className="border-2 border-yellow-200 dark:border-yellow-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Suspended</CardTitle>
-                        <UsersRound className="h-4 w-4 text-red-500" />
+                        <CardTitle className="text-sm font-medium">Pending</CardTitle>
+                        <UserPlus className="h-4 w-4 text-yellow-500" />
                       </CardHeader>
                       <CardContent>
-                        <div className="text-2xl font-bold">{adminAnalytics.users?.suspended || 0}</div>
-                        <p className="text-xs text-muted-foreground">Suspended accounts</p>
+                        <div className="text-2xl font-bold">{adminAnalytics.users?.pending || 0}</div>
+                        <p className="text-xs text-muted-foreground">Pending verification</p>
                       </CardContent>
                     </Card>
                   </div>
@@ -333,7 +332,7 @@ export default function Dashboard() {
                       Overview of all agents in the system
                     </p>
                   </div>
-                  <div className="grid gap-4 md:grid-cols-4">
+                  <div className="grid gap-4 md:grid-cols-3">
                     <Card className="border-2 border-purple-200 dark:border-purple-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Agents</CardTitle>
@@ -364,16 +363,6 @@ export default function Dashboard() {
                         <p className="text-xs text-muted-foreground">Awaiting approval</p>
                       </CardContent>
                     </Card>
-                    <Card className="border-2 border-red-200 dark:border-red-800">
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Rejected</CardTitle>
-                        <Users className="h-4 w-4 text-red-500" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">{adminAnalytics.agents?.rejected || 0}</div>
-                        <p className="text-xs text-muted-foreground">Rejected applications</p>
-                      </CardContent>
-                    </Card>
                   </div>
                 </section>
 
@@ -396,146 +385,111 @@ export default function Dashboard() {
                         <p className="text-xs text-muted-foreground">All time</p>
                       </CardContent>
                     </Card>
-                    <Card className="border-2 border-blue-200 dark:border-blue-800">
+                    <Card className="border-2 border-green-200 dark:border-green-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Today</CardTitle>
-                        <TrendingUp className="h-4 w-4 text-blue-500" />
+                        <CardTitle className="text-sm font-medium">Completed</CardTitle>
+                        <TrendingUp className="h-4 w-4 text-green-500" />
                       </CardHeader>
                       <CardContent>
-                        <div className="text-2xl font-bold">{adminAnalytics.transactions?.today || 0}</div>
-                        <p className="text-xs text-muted-foreground">Transactions today</p>
+                        <div className="text-2xl font-bold">{adminAnalytics.transactions?.completed || 0}</div>
+                        <p className="text-xs text-muted-foreground">Successful</p>
                       </CardContent>
                     </Card>
-                    <Card className="border-2 border-cyan-200 dark:border-cyan-800">
+                    <Card className="border-2 border-yellow-200 dark:border-yellow-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">This Week</CardTitle>
-                        <TrendingUp className="h-4 w-4 text-cyan-500" />
+                        <CardTitle className="text-sm font-medium">Pending</CardTitle>
+                        <TrendingUp className="h-4 w-4 text-yellow-500" />
                       </CardHeader>
                       <CardContent>
-                        <div className="text-2xl font-bold">{adminAnalytics.transactions?.thisWeek || 0}</div>
-                        <p className="text-xs text-muted-foreground">Last 7 days</p>
+                        <div className="text-2xl font-bold">{adminAnalytics.transactions?.pending || 0}</div>
+                        <p className="text-xs text-muted-foreground">Processing</p>
                       </CardContent>
                     </Card>
-                    <Card className="border-2 border-teal-200 dark:border-teal-800">
+                    <Card className="border-2 border-red-200 dark:border-red-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">This Month</CardTitle>
-                        <TrendingUp className="h-4 w-4 text-teal-500" />
+                        <CardTitle className="text-sm font-medium">Failed</CardTitle>
+                        <TrendingUp className="h-4 w-4 text-red-500" />
                       </CardHeader>
                       <CardContent>
-                        <div className="text-2xl font-bold">{adminAnalytics.transactions?.thisMonth || 0}</div>
-                        <p className="text-xs text-muted-foreground">Current month</p>
+                        <div className="text-2xl font-bold">{adminAnalytics.transactions?.failed || 0}</div>
+                        <p className="text-xs text-muted-foreground">Unsuccessful</p>
                       </CardContent>
                     </Card>
                   </div>
                 </section>
 
-                {/* Revenue Stats */}
+                {/* Revenue & Platform Stats */}
                 <section>
                   <div className="mb-4">
-                    <h2 className="text-base font-semibold">Revenue Statistics</h2>
+                    <h2 className="text-base font-semibold">Platform Revenue Statistics</h2>
                     <p className="text-sm text-muted-foreground">
-                      Platform revenue and earnings
+                      Platform financial overview
                     </p>
                   </div>
-                  <div className="grid gap-4 md:grid-cols-4">
+                  <div className="grid gap-4 md:grid-cols-5">
+                    <Card className="border-2 border-blue-200 dark:border-blue-800">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Platform Balance</CardTitle>
+                        <DollarSign className="h-4 w-4 text-blue-500" />
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">
+                          ৳{(adminAnalytics.platform?.totalBalance || 0).toLocaleString()}
+                        </div>
+                        <p className="text-xs text-muted-foreground">Current balance</p>
+                      </CardContent>
+                    </Card>
                     <Card className="border-2 border-emerald-200 dark:border-emerald-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                        <CardTitle className="text-sm font-medium">Revenue Collected</CardTitle>
                         <DollarSign className="h-4 w-4 text-emerald-500" />
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          ৳{(adminAnalytics.revenue?.total || 0).toLocaleString()}
+                          ৳{(adminAnalytics.platform?.revenueCollected || 0).toLocaleString()}
                         </div>
                         <p className="text-xs text-muted-foreground">All time</p>
                       </CardContent>
                     </Card>
                     <Card className="border-2 border-green-200 dark:border-green-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Today</CardTitle>
+                        <CardTitle className="text-sm font-medium">Net Revenue</CardTitle>
                         <DollarSign className="h-4 w-4 text-green-500" />
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          ৳{(adminAnalytics.revenue?.today || 0).toLocaleString()}
+                          ৳{(adminAnalytics.platform?.netRevenue || 0).toLocaleString()}
                         </div>
-                        <p className="text-xs text-muted-foreground">Revenue today</p>
+                        <p className="text-xs text-muted-foreground">After expenses</p>
                       </CardContent>
                     </Card>
-                    <Card className="border-2 border-lime-200 dark:border-lime-800">
+                    <Card className="border-2 border-orange-200 dark:border-orange-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">This Week</CardTitle>
-                        <DollarSign className="h-4 w-4 text-lime-500" />
+                        <CardTitle className="text-sm font-medium">Commissions Paid</CardTitle>
+                        <DollarSign className="h-4 w-4 text-orange-500" />
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          ৳{(adminAnalytics.revenue?.thisWeek || 0).toLocaleString()}
+                          ৳{(adminAnalytics.platform?.commissionsPaid || 0).toLocaleString()}
                         </div>
-                        <p className="text-xs text-muted-foreground">Last 7 days</p>
+                        <p className="text-xs text-muted-foreground">To agents</p>
                       </CardContent>
                     </Card>
                     <Card className="border-2 border-amber-200 dark:border-amber-800">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">This Month</CardTitle>
+                        <CardTitle className="text-sm font-medium">Bonuses Given</CardTitle>
                         <DollarSign className="h-4 w-4 text-amber-500" />
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          ৳{(adminAnalytics.revenue?.thisMonth || 0).toLocaleString()}
+                          ৳{(adminAnalytics.platform?.bonusGiven || 0).toLocaleString()}
                         </div>
-                        <p className="text-xs text-muted-foreground">Current month</p>
+                        <p className="text-xs text-muted-foreground">To users</p>
                       </CardContent>
                     </Card>
                   </div>
                 </section>
 
-                {/* Platform Wallet */}
-                <section>
-                  <div className="mb-4">
-                    <h2 className="text-base font-semibold">Platform Wallet</h2>
-                    <p className="text-sm text-muted-foreground">
-                      Platform wallet balance and expenses
-                    </p>
-                  </div>
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <Card className="border-2 border-violet-200 dark:border-violet-800">
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Balance</CardTitle>
-                        <Wallet className="h-4 w-4 text-violet-500" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">
-                          ৳{(adminAnalytics.platformWallet?.balance || 0).toLocaleString()}
-                        </div>
-                        <p className="text-xs text-muted-foreground">Current balance</p>
-                      </CardContent>
-                    </Card>
-                    <Card className="border-2 border-rose-200 dark:border-rose-800">
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Bonuses Given</CardTitle>
-                        <DollarSign className="h-4 w-4 text-rose-500" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">
-                          ৳{(adminAnalytics.platformWallet?.totalBonusesGiven || 0).toLocaleString()}
-                        </div>
-                        <p className="text-xs text-muted-foreground">Total bonuses</p>
-                      </CardContent>
-                    </Card>
-                    <Card className="border-2 border-emerald-200 dark:border-emerald-800">
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Revenue Collected</CardTitle>
-                        <TrendingUp className="h-4 w-4 text-emerald-500" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">
-                          ৳{(adminAnalytics.platformWallet?.totalRevenueCollected || 0).toLocaleString()}
-                        </div>
-                        <p className="text-xs text-muted-foreground">Total fees collected</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </section>
               </div>
             )}
           </div>

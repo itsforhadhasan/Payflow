@@ -1,5 +1,5 @@
 import { getUserTypeFromHeader } from "@/utils/auth";
-import { ArrowRightLeft, Banknote, Building2, FileText, History, Home, Package2, Plus, Receipt, Send, Users } from "lucide-react";
+import { ArrowRightLeft, Banknote, Building2, FileText, History, Home, Package2, Plus, Receipt, Send, Users, Wallet } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import MenuItem from "./MenuItem";
@@ -34,6 +34,12 @@ export const MENU_ITEMS: MenuItem[] = [
     label: "Billers",
     href: "/dashboard/billers",
     icon: <FileText className="h-4 w-4" />,
+    allowedUserTypes: ["Admin"],
+  },
+  {
+    label: "Platform Wallet",
+    href: "/dashboard/platform-wallet",
+    icon: <Wallet className="h-4 w-4" />,
     allowedUserTypes: ["Admin"],
   },
   {

@@ -8,32 +8,43 @@ export interface DashboardAnalytics {
   users: {
     total: number;
     active: number;
-    inactive: number;
+    pending: number;
     suspended: number;
+    consumer: number;
+    agent: number;
   };
   agents: {
     total: number;
     active: number;
     pending: number;
-    rejected: number;
   };
   transactions: {
     total: number;
-    today: number;
-    thisWeek: number;
-    thisMonth: number;
+    completed: number;
+    pending: number;
+    failed: number;
+    byType: {
+      sendMoney: { count: number; volume: number };
+      addMoney: { count: number; volume: number };
+      cashOut: { count: number; volume: number };
+      billPayment: { count: number; volume: number };
+    };
   };
-  revenue: {
-    total: number;
-    today: number;
-    thisWeek: number;
-    thisMonth: number;
+  platform: {
+    totalBalance: number;
+    revenueCollected: number;
+    bonusGiven: number;
+    commissionsPaid: number;
+    netRevenue: number;
   };
-  platformWallet: {
-    balance: number;
-    totalBonusesGiven: number;
-    totalRevenueCollected: number;
-  };
+  recentTransactions: Array<{
+    id: string;
+    transactionId: string;
+    type: string;
+    amount: string;
+    status: string;
+    createdAt: string;
+  }>;
 }
 
 export interface TransactionAnalytics {
