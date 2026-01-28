@@ -20,13 +20,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AmountField } from "@/components/ui/amount-field";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,9 +36,6 @@ const FormSchema = z.object({
   accountNumber: z.string().regex(/^\d{5,50}$/, "Account number must be 5-50 digits"),
   accountHolderName: z.string().min(2, "Account holder name must be at least 2 characters").max(255, "Account holder name must not exceed 255 characters"),
   routingNumber: z.string().regex(/^\d{9,20}$/, "Routing number must be 9-20 digits").optional().or(z.literal("")),
-  transferType: z.enum(["INSTANT", "STANDARD"], {
-    required_error: "Please select a transfer type",
-  }),
   amount: z.string().min(1, "Amount is required").refine((val) => {
     const num = parseFloat(val);
     return !isNaN(num) && num >= 10 && num <= 100000;
@@ -67,7 +57,6 @@ export default function BankTransferPage() {
       accountNumber: "",
       accountHolderName: "",
       routingNumber: "",
-      transferType: "INSTANT",
       amount: "",
       description: "",
     },
@@ -222,51 +211,23 @@ export default function BankTransferPage() {
                     )}
                   />
 
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="transferType"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Transfer Type</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                  <FormField
+                    control={form.control}
+                    name="amount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Amount (৳)</FormLabel>
+                        <FormControl>
+                          <AmountField
+                            placeholder="5000"
+                            {...field}
                             disabled={isPending}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select transfer type" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="INSTANT">Instant</SelectItem>
-                              <SelectItem value="STANDARD">Standard</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="amount"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Amount (৳)</FormLabel>
-                          <FormControl>
-                            <AmountField
-                              placeholder="5000"
-                              {...field}
-                              disabled={isPending}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <FormField
                     control={form.control}

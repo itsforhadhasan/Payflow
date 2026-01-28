@@ -9,7 +9,6 @@ export interface BankTransferData {
   accountNumber: string;
   accountHolderName: string;
   routingNumber?: string;
-  transferType: "INSTANT" | "STANDARD";
   amount: number;
   description?: string;
 }

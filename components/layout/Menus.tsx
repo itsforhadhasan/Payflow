@@ -1,5 +1,5 @@
 import { getUserTypeFromHeader } from "@/utils/auth";
-import { ArrowRightLeft, Banknote, Building2, FileText, History, Home, Package2, Plus, Send, Users } from "lucide-react";
+import { ArrowRightLeft, Banknote, Building2, FileText, History, Home, Package2, Plus, Receipt, Send, Users } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import MenuItem from "./MenuItem";
@@ -86,6 +86,24 @@ export const MENU_ITEMS: MenuItem[] = [
       {
         label: "History",
         href: "/dashboard/bank-transfer/history",
+        icon: <History className="h-4 w-4" />,
+      },
+    ],
+  },
+  {
+    label: "Bill Payment",
+    href: "/dashboard/bill-payment",
+    icon: <Receipt className="h-4 w-4" />,
+    allowedUserTypes: ["Consumer"],
+    subItems: [
+      {
+        label: "Pay Bills",
+        href: "/dashboard/bill-payment",
+        icon: <Receipt className="h-4 w-4" />,
+      },
+      {
+        label: "Payment History",
+        href: "/dashboard/bill-payment/history",
         icon: <History className="h-4 w-4" />,
       },
     ],
