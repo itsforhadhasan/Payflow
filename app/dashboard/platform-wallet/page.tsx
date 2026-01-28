@@ -8,7 +8,6 @@ import {
   type PlatformWalletTransaction,
   type ReconciliationResult,
 } from "@/actions/platform-wallet-actions";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -106,21 +105,6 @@ export default function PlatformWalletPage() {
       toast.error("Failed to perform reconciliation");
     }
     setIsReconciling(false);
-  };
-
-  const getTransactionTypeLabel = (type: string): string => {
-    const labels: Record<string, string> = {
-      FEE_COLLECTED: "Fee Collected",
-      COMMISSION_PAID: "Commission Paid",
-      BONUS_GIVEN: "Bonus Given",
-      CASHBACK_GIVEN: "Cashback Given",
-      ADD_MONEY_DEPOSIT: "Add Money Deposit",
-      REVENUE_OTHER: "Other Revenue",
-      EXPENSE_OTHER: "Other Expense",
-      SETTLEMENT: "Settlement",
-      ADJUSTMENT: "Adjustment",
-    };
-    return labels[type] || type;
   };
 
   return (
@@ -235,11 +219,10 @@ export default function PlatformWalletPage() {
             {reconciliation && (
               <CardContent>
                 <div
-                  className={`p-4 rounded-lg border-2 ${
-                    reconciliation.success
-                      ? "bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
-                      : "bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800"
-                  }`}
+                  className={`p-4 rounded-lg border-2 ${reconciliation.success
+                    ? "bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
+                    : "bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800"
+                    }`}
                 >
                   <div className="flex items-start gap-3">
                     {reconciliation.success ? (
@@ -273,11 +256,10 @@ export default function PlatformWalletPage() {
                         <div className="flex justify-between pt-2 border-t">
                           <span className="text-muted-foreground">Discrepancy:</span>
                           <span
-                            className={`font-bold ${
-                              (reconciliation.discrepancy || 0) === 0
-                                ? "text-green-600"
-                                : "text-yellow-600"
-                            }`}
+                            className={`font-bold ${(reconciliation.discrepancy || 0) === 0
+                              ? "text-green-600"
+                              : "text-yellow-600"
+                              }`}
                           >
                             ৳{Math.abs(reconciliation.discrepancy || 0).toLocaleString()}
                           </span>
@@ -325,11 +307,7 @@ export default function PlatformWalletPage() {
                     <TableHeader>
                       <TableRow>
                         <TableHead className="min-w-[80px]">ID</TableHead>
-                        <TableHead className="min-w-[160px]">Type</TableHead>
-                        <TableHead className="min-w-[80px]">Entry</TableHead>
                         <TableHead className="min-w-[120px]">Amount</TableHead>
-                        <TableHead className="min-w-[120px]">Balance Before</TableHead>
-                        <TableHead className="min-w-[120px]">Balance After</TableHead>
                         <TableHead className="min-w-[200px]">Description</TableHead>
                         <TableHead className="min-w-[160px]">Date</TableHead>
                       </TableRow>
@@ -343,41 +321,14 @@ export default function PlatformWalletPage() {
                             </span>
                           </TableCell>
                           <TableCell>
-                            <Badge variant="outline">
-                              {getTransactionTypeLabel(transaction.transactionType)}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={
-                                transaction.entryType === "CREDIT"
-                                  ? "default"
-                                  : "secondary"
-                              }
-                            >
-                              {transaction.entryType}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
                             <span
-                              className={`font-semibold ${
-                                transaction.entryType === "CREDIT"
-                                  ? "text-green-600"
-                                  : "text-red-600"
-                              }`}
+                              className={`font-semibold ${transaction.entryType === "CREDIT"
+                                ? "text-green-600"
+                                : "text-red-600"
+                                }`}
                             >
                               {transaction.entryType === "CREDIT" ? "+" : "-"}৳
                               {(transaction.amount || 0).toLocaleString()}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            <span className="text-sm">
-                              ৳{(transaction.balanceBefore || 0).toLocaleString()}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            <span className="text-sm font-medium">
-                              ৳{(transaction.balanceAfter || 0).toLocaleString()}
                             </span>
                           </TableCell>
                           <TableCell>

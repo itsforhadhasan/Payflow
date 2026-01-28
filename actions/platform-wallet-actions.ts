@@ -97,8 +97,10 @@ export async function GET_PLATFORM_WALLET_TRANSACTIONS(
     const response = await x_axios.get(
       `/admin/platform-wallet/transactions?${params.toString()}`
     );
+
     return { success: true, data: response.data.data };
   } catch (error) {
+
     return formatError(error);
   }
 }
